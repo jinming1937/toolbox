@@ -1,0 +1,63 @@
+@import './base.scss';
+textarea {
+    border: none;
+}
+
+// .textarea-face::before,
+// .textarea-face::after,
+// .using::before,
+// .using::after {
+//     content: "";
+//     border: 1px solid #909090;
+// }
+.box {
+    background: #b5b5b5;
+    main {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        .context {
+            padding: 10px;
+            .textarea-face {
+                
+                line-height: 1;
+                .parse-url-area {
+                    resize: unset;
+                    width: 100%;
+                }
+            }
+            .tool-cbx {
+                width: 14px;
+                height: 14px;
+                margin-right: 20px;
+            }
+            .tool-lab {
+                user-select: none;
+                cursor: pointer;
+                vertical-align: middle;
+            }
+        }
+        .param-plugs {
+            display: flex;
+            padding: 10px;
+            .using {
+                flex: 0.5;
+                .paramTojson {
+                    resize: unset;
+                    width: 100%;
+                }
+            }
+            .count {
+                flex: 0.5;
+                margin-left: 10px;
+                .param-data {
+                    li {
+                        width: 100%;
+                        .data-name {
+                            width: 30%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

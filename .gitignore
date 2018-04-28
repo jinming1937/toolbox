@@ -1,0 +1,44 @@
+# kdiff3 ignore
+*.orig
+# maven ignore
+target/
+# eclipse ignore
+.settings/
+.project
+.classpath
+# vscode ignore
+.vscode/
+tsconfig.json
+# idea ignore
+.idea/
+*.ipr
+*.iml
+*.iws
+# temp ignore
+.eslintcache
+.eslintstatus
+*.log
+*.log.*
+*.cache
+*.diff
+*.patch
+*.tmp
+# system ignore
+.DS_Store
+Thumbs.db
+# package ignore (optional)
+# *.jar
+# *.war
+# *.zip
+# *.tar
+# *.tar.gz
+node_modules/
+dev/
+prd/
+ver/
+.happypack/
+.lib_cache/
+.eslintstatus
+.eslintcache
+.prepushcache
+package-lock.json
