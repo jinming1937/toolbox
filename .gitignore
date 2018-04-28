@@ -36,6 +36,7 @@ node_modules/
 dev/
 prd/
 ver/
+dist/
 .happypack/
 .lib_cache/
 .eslintstatus
