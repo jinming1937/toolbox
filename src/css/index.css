@@ -1,0 +1,47 @@
+
+* {
+    margin: 0;
+    padding: 0
+}
+
+input::-webkit-search-cancel-button {
+    display: none
+}
+
+input[type=month],
+input[type=number],
+input[type=password],
+input[type=search],
+input[type=tel],
+input[type=text],
+input[type=time],
+input[type=url],
+input[type=week],
+select,
+textarea {
+    -webkit-appearance: none;
+    line-height: 21px;
+    background-color: #fff;
+    border: 1px solid #bebebe;
+    outline: 0
+}
+
+body {
+    background: #fff;
+    font-size: 1rem
+}
+
+ul li {
+    list-style: none
+}
+
+
+.app{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    color: #444;
+    text-align: center;
+    margin: -70px 0 0;
+}

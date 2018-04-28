@@ -1,3 +1,4 @@
 ## ToolBox 工具箱
-
->* 方便一下
+>* npm i ykit -g
+>* ykit init
+>* npm run start
