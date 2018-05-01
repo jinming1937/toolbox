@@ -62,16 +62,10 @@
         function fn(val) {
             times++;
             val = window.decodeURIComponent(val);
-            // console.log(val);
             times > 2 ? '' : fn(val);
             return val;
         }
         return fn(val);
-    }
-    function analysis(url) {
-        var obj = {};
-        obj.protocol = url.replace(/^(http|https)/, '$1');
-        return obj;
     }
     var txt = $('url_txt'),
         cbx = $('isClear_cbx'),
@@ -85,7 +79,6 @@
         }, 0);
     });
     txt.addEventListener('blur', function (e) {
-        // console.log(cbx.value);
         if (cbx.checked) {
             txt.value = '';
         }
