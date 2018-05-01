@@ -34,19 +34,19 @@
     function decode(val) {
         var times = 0;
         if (!val.match(/^(http(s)?:\/\/)?([a-zA-Z]+\.){2,}[a-zA-Z]+(\/)?(.)*/)) {
-            alert('不合法的url');
+            console.error('不合法的url');
             return val;
         }
-        testUrl(val,function(e){
-            console.log(e);
-        });
+        // testUrl(val,function(e){
+        //     console.log(e);
+        // });
         var data = {
             params: (val.match(/[\=]/) || []).length,
             bits: val.length,
             length: val.length,
-            protocol: val.replace(/^(http|https)\.*/, '$1') || '',
-            domain: val.replace(/^(http(s)?:\/\/)?(([a-zA-Z]+\.){2,}[a-zA-Z]+)(.)*/, '$2') || '',
-            url: val
+            protocol: (val.match(/^http(s)?/) || ['未识别'])[0],
+            domain: val.replace(/^(http[s]?:\/\/)?(([a-zA-Z]+\.){2,}[a-zA-Z]+)(.)*/, '$2') || '',
+            // url: val
         }
         for (var da in data) {
             try {
@@ -54,6 +54,10 @@
             } catch (error) {
                 console.log('this dom of id is data-' + da + ' is not exzist!!');
             }
+        }
+        resultArea.value = val;
+        if(auto.checked){
+          val = val.replace(/(\?(?!\?)|\&|\#)/g, '\n$1\n');
         }
         function fn(val) {
             times++;
@@ -72,11 +76,12 @@
     var txt = $('url_txt'),
         cbx = $('isClear_cbx'),
         auto = $('isAutoChangeLine_cbx'),
+        resultArea = $('json_result'),
         cacheValue = '';
     txt.addEventListener('paste', function (e) {
         setTimeout(function () {
             cacheValue = txt.value;
-            txt.value = (decode(cacheValue) || "").replace(/(\?|\&|\#)/g, '\n$1\n');
+            txt.value = decode(cacheValue) || cacheValue;
         }, 0);
     });
     txt.addEventListener('blur', function (e) {

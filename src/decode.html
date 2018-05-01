@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="UTF-8">
     <meta name="keywords" content="URL解析,JSON格式化,JSON parse,小鱼蛋糕">
@@ -18,13 +17,12 @@
     <title>URL解析</title>
     <link rel="stylesheet" type="text/css" href="css/decode.css" />
 </head>
-
 <body>
     <div class="box">
         <nav class="nav-bar">
             <h3>URL解析</h3>
-            <a class="nav-to" href="./json.html">JSON大工作区&gt;&gt;</a>
-            <!-- <a class="nav-to" href="./bc/index.html">N年前的小示例&gt;&gt;</a> -->
+            <a class="nav-to" href="./json.html" style="right: 120px;">JSON大工作区&gt;&gt;</a>
+            <a class="nav-to" href="./bc/index.html">N年前的小示例&gt;&gt;</a>
             <hr>
         </nav>
         <main>
@@ -39,21 +37,9 @@
                     <input class="tool-cbx" type="checkbox" id="isAutoChangeLine_cbx">
                 </div>
             </section>
-            <!--
-                xxxx
-
-
-
-
-
-
-                
-            -->
-
-            <!--xxxx-->
             <section class="param-plugs">
                 <section class="using">
-                    <textarea id="json_result" cols="30" rows="10" class="paramTojson" readonly="readonly" placeholder="转换成对象"></textarea>
+                    <textarea id="json_result" cols="30" rows="10" class="paramTojson" readonly placeholder="转换成对象（未实现）"></textarea>
                 </section>
                 <section class="count">
                     <ul class="param-data">
@@ -77,14 +63,22 @@
                             <span class="data-name">域名</span>
                             <span class="data-value" id="data-domain"></span>
                         </li>
-                        <li>
+                        <!-- <li>
                             <span class="data-name">URL</span>
                             <span class="data-value" id="data-url"></span>
-                        </li>
+                        </li> -->
                     </ul>
                 </section>
             </section>
         </main>
+        <footer class="">
+          <hr>
+          <ul>
+              <li><small> jin © 2017 |</small></li>
+              <li><small><a href="javascript:void(0);">jinming1937@163.com</a></small></li>
+          </ul>
+          <small>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</small>
+      </footer>
     </div>
     <script src="./js/decode.js"></script>
 </body>

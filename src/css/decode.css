@@ -121,3 +121,13 @@ textarea {
 .box main .param-plugs .count .param-data li .data-name {
     width: 30%
 }
+
+.box footer {
+  width: 100%;
+  text-align: center;
+  clear: both
+}
+
+.box footer li {
+  display: inline-block
+}
