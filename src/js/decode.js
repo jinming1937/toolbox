@@ -33,7 +33,7 @@
     }
     function decode(val) {
         var times = 0;
-        if (!val.match(/^(http(s)?:\/\/)?([a-zA-Z]+\.){2,}[a-zA-Z]+(\/)?(.)*/)) {
+        if (!val.match(/^(http(s)?:\/\/)?([a-zA-Z]+\.){1,}[a-zA-Z]+(\/)?(.)*/)) {
             console.error('不合法的url');
             return val;
         }
@@ -45,7 +45,7 @@
             bits: val.length,
             length: val.length,
             protocol: (val.match(/^http(s)?/) || ['未识别'])[0],
-            domain: val.replace(/^(http[s]?:\/\/)?(([a-zA-Z]+\.){2,}[a-zA-Z]+)(.)*/, '$2') || '',
+            domain: val.replace(/^(http[s]?:\/\/)?(([a-zA-Z]+\.){1,}[a-zA-Z]+)(.)*/, '$2') || '',
             // url: val
         }
         for (var da in data) {
