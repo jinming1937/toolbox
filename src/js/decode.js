@@ -2,44 +2,12 @@
   function $(id) {
     return document.getElementById(id);
   }
-  function testUrl(url, cb) {
-    // 不好
-    // var img = new Image();
-    // img.onerror = function name(error) {
-    //     console.log(error);
-    // }
-    // img.onload = function name(e) {
-    //     console.log(e);
-    //     typeof cb === 'function' && cb();
-    // }
-    // img.src = url;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('get', url, true);
-    xhr.send();
-    xhr.onreadystatechange = function (e) {
-      if (xhr.status < 4) {
-        return;
-      }
-      if (xhr.readyState >= 200 && xhr.readyState <= 504) {
-        typeof cb === 'function' && cb(xhr.responseText, e);
-      }
-    }
-    setTimeout(function () {
-      xhr.abort();
-      console.log(xhr.responseURL);
-    }, 50);
-    history.pushState(url, document.title, null);
-  }
   function decode(val) {
     var times = 0;
     if (!val.match(/^(http(s)?:\/\/)?[a-z0-9]+(\.[a-z0-9]+)*(\/)?(.)*/i)) {
       console.error('不合法的url');
       return val;
     }
-    // testUrl(val,function(e){
-    //     console.log(e);
-    // });
     var data = {
       params: (val.match(/[\=]/) || []).length,
       bits: val.length,
@@ -84,15 +52,3 @@
     }
   })
 })();
-
-
-window.addEventListener('keydown', function (e) {
-  console.log('keyDown', e.keyCode);
-});
-window.addEventListener('keypress', function (e) {
-  console.log('keyPress', e.keyCode);
-});
-window.addEventListener('keyup', function (e) {
-  console.log('keyUp', e.keyCode);
-});
-
