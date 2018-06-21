@@ -4,10 +4,10 @@
   }
   function decode(val) {
     var times = 0;
-    if (!val.match(/^(http(s)?:\/\/)?[a-z0-9]+(\.[a-z0-9]+)*(\/)?(.)*/i)) {
-      console.error('不合法的url');
-      return val;
-    }
+    // if (!val.match(/^(http(s)?:\/\/)?[a-z0-9]+(\.[a-z0-9]+)*(\/)?(.)*/i)) {
+    //   console.error('不合法的url');
+    //   return val;
+    // }
     var data = {
       params: (val.match(/[\=]/) || []).length,
       bits: val.length,
