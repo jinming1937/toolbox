@@ -29,8 +29,10 @@
     $msg_str: $('.msg_str'),
     $labCheckedAa: $('.lab-checked-Aa'),
     $labCheckedTree: $('.lab-checked-Tree'),
+    $labCheckedValue: $('.lab-checked-Value'),
     shiftIsDown: false,
     isFormating: false,
+    timeFlag: 0,
     aimId: 0,
     /* shift键 */
     objStr: '',
@@ -52,7 +54,7 @@
             break;
         }
       };
-      _this.fastParseWorker.onerror = function (event) {
+      _this.fastParseWorker.onerror = function () {
         _this.aimId = 0;
         // console.log(event);
         _this.$progressSucc.hide();
@@ -91,13 +93,13 @@
     bindEvent: function () {
       var _this = this;
       /* 字符串对象输入框 */
-      _this.$txtObjectString.on('change', function (e) {
+      _this.$txtObjectString.on('change', function () {
         if (!_this.isFormating) {
           _this.formatToObj();
         }
       });
 
-      _this.$searchTxt.on("focus", function (e) {
+      _this.$searchTxt.on("focus", function () {
         /* 关键字输入框 */
         _this.$searchTxt.on('keydown', function (e) {
           if (e.keyCode === 16) {
@@ -129,10 +131,13 @@
             _this.shiftIsDown = false;
           }
           var val = $(this).val();
-          _this.execCreateWin(val);
-          console.log("searching!!!");
+          clearTimeout(this.timeFlag);
+          this.timeFlag = setTimeout(function () {
+            _this.execCreateWin(val);
+            console.log("searching!!!");
+          }, 300);
         });
-      }).on("blur", function (e) {
+      }).on("blur", function () {
         _this.$searchTxt.off("keydown").off("keyup");
       });
 
@@ -152,14 +157,14 @@
       });
 
       /* 弹层出现，页面禁止滚动 */
-      _this.$resultList.on('focus', function (e) {
+      _this.$resultList.on('focus', function () {
         $('body').css('overflow', 'hidden');
-      }).on('blur', function (e) {
+      }).on('blur', function () {
         $('body').css('overflow', 'auto');
       });
 
       /* 大小写是否敏感 */
-      _this.$labCheckedAa.on('click', function (e) {
+      _this.$labCheckedAa.on('click', function () {
         if ($(this).hasClass('on')) {
           $(this).removeClass('on');
         } else {
@@ -170,11 +175,21 @@
       });
 
       /* 是否进行深度遍历 */
-      _this.$labCheckedTree.on('click', function (e) {
+      _this.$labCheckedTree.on('click', function () {
         if ($(this).hasClass('del')) {
           $(this).removeClass('del');
         } else {
           $(this).addClass('del');
+        }
+        /*重置结果列表*/
+        _this.execCreateWin(_this.$searchTxt.val());
+      });
+
+      _this.$labCheckedValue.on('click', function () {
+        if ($(this).hasClass('on')) {
+          $(this).removeClass('on');
+        } else {
+          $(this).addClass('on');
         }
         /*重置结果列表*/
         _this.execCreateWin(_this.$searchTxt.val());
@@ -259,7 +274,7 @@
      * @param  {[type]} e [description]
      * @return {[type]}   [description]
      */
-    formatToObj: function (e) {
+    formatToObj: function () {
       var _this = this;
       _this.beginTime = +new Date();
       _this.objStr = _this.$txtObjectString.val().trim();
@@ -281,7 +296,7 @@
       // 这里开个挂(\.)点作为一个全匹配,偷偷保留
       // 注意： - 必须用\-转义， 因为 - 会导致成为区间选择而包含.等字符
       // 而且， - 位置不能乱放，如/[:-"]/g.test('.') 是非法正则： Uncaught SyntaxError: Invalid regular expression: /[:-"]/: Range out of order in character class
-      if (/[\!@#\$%\^&\*\(\)\_\+\-=\|\<\>\?,\/\[\]\\;':"]/g.test(val)) {
+      if (/[-!@#$%^&*()_+=|<>?,/\[\]\\;':"\/]/g.test(val)) {
         return;
       }
       if (_this.objAim === null) {
@@ -294,6 +309,7 @@
         setTimeout(function () {
           _this.$resultList.show();
           console.log("search time:" + (+new Date() - time) + " ms");
+          // console.log(_this.$resultList[0].innerHTML.match(/\%[^%]*?\%/g).join('\n').replace(/[%"']/g, ''));
         }, 0);
       } else {
         _this.$resultList.hide();
@@ -323,7 +339,7 @@
      * 获取属性值的dom
      * @return {[type]}     [description]
      */
-    getPropertyValueDom: function (propertyValue) {
+    getPropertyValueDom: function (propertyValue, name) {
       var type = typeof propertyValue;
       var className = '';
       var value = '',
@@ -363,11 +379,7 @@
       elementSpan.className = "value-content " + className + "_color";
       elementSpan.setAttribute('data-color', className);
       elementSpan.textContent = "|[" + typeVal + "]:" + value;
-      // elementInput.type = "text";
-      // elementInput.setAttribute("readonly","readonly");
-      // elementInput.className = "true-value "+className+"_color";
-      // elementInput.value = value;
-      // elementSpan.appendChild(elementInput);
+      // elementSpan.textContent = "%" + (name || "/") + "：" + value + "%";
       return elementSpan;
     },
     /**
@@ -385,6 +397,7 @@
         lowerOrUpper,
         isUpper = _this.$labCheckedAa.hasClass('on') ? false : true,
         isDeep = _this.$labCheckedTree.hasClass('del') ? false : true;
+      // isByValue = _this.$labCheckedValue.hasClass('on') ? false : true;
       paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.';
       lowerOrUpper = isUpper ? new RegExp(paramKeywords, 'i') : new RegExp(paramKeywords);
 
@@ -404,7 +417,7 @@
               item.replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords));
             elementLi.appendChild(elementSpan);
           }
-          elementLi.appendChild(_this.getPropertyValueDom(paramParentObj[item]));
+          elementLi.appendChild(_this.getPropertyValueDom(paramParentObj[item], paramParentObj['name']));
           loopResultStr.appendChild(elementLi);
         }
         if (isDeep &&
@@ -426,11 +439,6 @@
   /* 代码执行 */
   (function () {
     scanObject.init();
-    // window.addEventListener('keydown',function (e) {
-    // },false);
-    // window.addEventListener("keypress",function (e) { 
-    //     e.preventDefault(); 
-    // });
     /* keypress 只有在可打印字符的时候才会触发，上下enter不属于这个场景，所以只需要绑定keyup即可 */
     window.addEventListener('keyup', function (e) {
       // if(e.keyCode === 16){ /* shift ：左右都是16 */
