@@ -293,18 +293,22 @@
      */
     execCreateWin: function (val) {
       var _this = this;
-      // 这里开个挂(\.)点作为一个全匹配,偷偷保留
-      // 注意： - 必须用\-转义， 因为 - 会导致成为区间选择而包含.等字符
-      // 而且， - 位置不能乱放，如/[:-"]/g.test('.') 是非法正则： Uncaught SyntaxError: Invalid regular expression: /[:-"]/: Range out of order in character class
-      if (/[-!@#$%^&*()_+=|<>?,/\[\]\\;':"\/]/g.test(val)) {
-        return;
-      }
       if (_this.objAim === null) {
         return;
       }
-      var time = +new Date();
+      var time = +new Date(),
+        isByValue = _this.$labCheckedValue.hasClass('on') ? true : false;
+      // 这里开个挂(\.)点作为一个全匹配,偷偷保留
+      // 注意： - 必须用\-转义， 因为 - 会导致成为区间选择而包含.等字符
+      // 而且， - 位置不能乱放，如/[:-"]/g.test('.') 是非法正则： Uncaught SyntaxError: Invalid regular expression: /[:-"]/: Range out of order in character class
+      if (!isByValue && /[-!@#$%^&*()_+=|<>?,/\[\]\\;':"\/]/g.test(val)) {
+        return;
+      }
       _this.$resultList.html("");
-      _this.createDomTree(_this.objAim, val);
+      !isByValue ?
+        _this.mapKey(_this.objAim, val)
+        :
+        _this.mapValue(_this.objAim, val);
       if (_this.$resultList.children().length > 0) {
         setTimeout(function () {
           _this.$resultList.show();
@@ -389,7 +393,7 @@
      * @param  {[type]} paramParentName 累计父属性名
      * @return {[type]}                dom字符串
      */
-    createDomTree: function (paramParentObj, paramKeywords, paramParentName) {
+    mapKey: function (paramParentObj, paramKeywords, paramParentName) {
       if (paramKeywords === '') { return ''; }
       var _this = this,
         tempKeywords = '<b class="redword">{#name}</b>',
@@ -397,7 +401,6 @@
         lowerOrUpper,
         isUpper = _this.$labCheckedAa.hasClass('on') ? false : true,
         isDeep = _this.$labCheckedTree.hasClass('del') ? false : true;
-      // isByValue = _this.$labCheckedValue.hasClass('on') ? false : true;
       paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.';
       lowerOrUpper = isUpper ? new RegExp(paramKeywords, 'i') : new RegExp(paramKeywords);
 
@@ -429,7 +432,61 @@
             paramParentObj[item].length > 0
           )
         ) {
-          _this.createDomTree(paramParentObj[item], paramKeywords, paramParentName + item);
+          _this.mapKey(paramParentObj[item], paramKeywords, paramParentName + item);
+        }
+      }
+    },
+    mapValue: function (paramParentObj, paramKeywords, paramParentName) {
+      var _this = this,
+        tempKeywords = '<b class="redword">{#name}</b>',
+        loopResultStr = _this.$resultList[0],
+        lowerOrUpper,
+        isUpper = _this.$labCheckedAa.hasClass('on') ? false : true,
+        isDeep = _this.$labCheckedTree.hasClass('del') ? false : true,
+        regexp = new RegExp(paramKeywords, 'g'),
+        cacheValue = null;
+      paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.';
+      lowerOrUpper = isUpper ? new RegExp(paramKeywords, 'i') : new RegExp(paramKeywords);
+      /* 左序遍历树 */
+      for (var item in paramParentObj) {
+        cacheValue = paramParentObj[item];
+        if (!paramParentObj.hasOwnProperty(item)) { continue; } /* 主要用于清理对Array原型扩展的属性,导致for-in遍历出多余结果集bug,当然对其他类型也有效 */
+        switch (toString.call(cacheValue)) {
+          case '[object String]':
+          case '[object Number]':
+          case '[object Boolean]':
+          case '[object Null]':
+            if (cacheValue.search(lowerOrUpper) > -1) {
+              var elementLi = document.createElement("li");
+              var elementSpan = document.createElement("span");
+              elementSpan.className = "key-content";
+              elementLi.setAttribute("data-property", paramParentName + item);
+              if (isUpper) {
+                elementSpan.innerHTML = paramParentName + item; //_this.loopStr(paramParentName, paramKeywords) + _this.loopStr(item, paramKeywords);
+                elementLi.appendChild(elementSpan);
+              } else {
+                elementSpan.innerHTML = paramParentName.replace(regexp, tempKeywords.replace(/\{\#name\}/g, paramKeywords)) +
+                  item.replace(regexp, tempKeywords.replace(/\{\#name\}/g, paramKeywords));
+                elementLi.appendChild(elementSpan);
+              }
+              elementLi.appendChild(_this.getPropertyValueDom(paramParentObj[item], paramParentObj['name']));
+              loopResultStr.appendChild(elementLi);
+            }
+            break;
+          default:
+            break;
+        }
+
+        if (isDeep &&
+          typeof paramParentObj[item] === 'object' &&
+          paramParentObj[item] !== null &&
+          (
+            paramParentObj[item].constructor.name === 'Object' ||
+            paramParentObj[item].constructor.name === 'Array' &&
+            paramParentObj[item].length > 0
+          )
+        ) {
+          _this.mapKey(paramParentObj[item], paramKeywords, paramParentName + item);
         }
       }
     }
