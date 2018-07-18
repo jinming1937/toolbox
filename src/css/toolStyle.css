@@ -175,20 +175,20 @@ ul li {
   height: 25px
 }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .key-content {
-  width: 45%
+.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .shot-content {
+  width: 40%
 }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .key-content .redword {
+.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .shot-content .redword {
   background-color: #ff3;
   color: red
 }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .value-content {
-  width: 55%
+.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .long-content {
+  width: 60%
 }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .value-content .redword {
+.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .long-content .redword {
   background-color: #ff3;
   color: red
 }

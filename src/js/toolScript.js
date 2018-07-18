@@ -30,15 +30,17 @@
     $labCheckedAa: $('.lab-checked-Aa'),
     $labCheckedTree: $('.lab-checked-Tree'),
     $labCheckedValue: $('.lab-checked-Value'),
+    /* shift键 */
     shiftIsDown: false,
     isFormating: false,
     timeFlag: 0,
     aimId: 0,
-    /* shift键 */
+    isByValue: false,
     objStr: '',
     objAim: null,
     init: function () {
       var _this = this;
+      _this.isByValue = this.$labCheckedValue.hasClass('on') ? true : false;
       _this.fastParseWorker = new Worker('./js/fastParse.js');
       _this.fastParseWorker.onmessage = function (event) {
         console.log("json parse " + (+new Date() - _this.beginTime) + ' ms');
@@ -105,27 +107,22 @@
           if (e.keyCode === 16) {
             _this.shiftIsDown = true;
           }
-          /* 删除 数字 字母 下划线 */
-          if (e.keyCode === 8 || (e.keyCode >= 65 && e.keyCode <= 90)) {
-            "";
-          } else if ((e.keyCode >= 48 && e.keyCode <= 57) && !_this.shiftIsDown) { /* 只能输入数字，不能输入数字上面的符号，尤其不能输入$ */
-            "";
-          } else if (e.keyCode === 189 && _this.shiftIsDown) { /* -_ : 189 ,单独触发_ ,不允许- */
-            "";
-          } else if (e.keyCode === 37 || e.keyCode === 39) { /* 左右 */
-            "";
-          } else {
-            e.preventDefault();
-            return;
+          if (!_this.isByValue) {
+            /* 删除 数字 字母 下划线 */
+            if (e.keyCode === 8 || (e.keyCode >= 65 && e.keyCode <= 90)) {
+              "";
+            } else if ((e.keyCode >= 48 && e.keyCode <= 57) && !_this.shiftIsDown) { /* 只能输入数字，不能输入数字上面的符号，尤其不能输入$ */
+              "";
+            } else if (e.keyCode === 189 && _this.shiftIsDown) { /* -_ : 189 ,单独触发_ ,不允许- */
+              "";
+            } else if (e.keyCode === 37 || e.keyCode === 39) { /* 左右 */
+              "";
+            } else {
+              e.preventDefault();
+              return;
+            }
           }
         }).on("keyup", function (e) {
-          // 不理解为什么加这几行代码了 start
-          // if(_this.objStr.length === 0){
-          //     console.log('here?');
-          //     e.preventDefault();
-          //     return;
-          // }
-          // end 
           // 去判断shift
           if (e.keyCode === 16) { /* shift ：左右都是16 */
             _this.shiftIsDown = false;
@@ -188,7 +185,9 @@
       _this.$labCheckedValue.on('click', function () {
         if ($(this).hasClass('on')) {
           $(this).removeClass('on');
+          _this.isByValue = false;
         } else {
+          _this.isByValue = true;
           $(this).addClass('on');
         }
         /*重置结果列表*/
@@ -251,7 +250,7 @@
         }
         return val;
       };
-      className = _this.$resultList.find('li.on').children('span.value-content').attr("data-color");
+      className = _this.$resultList.find('li.on')[0].lastElementChild.getAttribute("data-color");
       cacheValue = getValue(_this.objAim, propertyName)
       value = JSON.stringify(cacheValue);
       clearClassName = _this.$printPropertyValue[0].className.match(/\w+\_color/g) || [""];
@@ -293,27 +292,25 @@
      */
     execCreateWin: function (val) {
       var _this = this;
-      if (_this.objAim === null) {
+      if (_this.objAim === null || val === '') {
         return;
       }
-      var time = +new Date(),
-        isByValue = _this.$labCheckedValue.hasClass('on') ? true : false;
+      var time = +new Date();
       // 这里开个挂(\.)点作为一个全匹配,偷偷保留
       // 注意： - 必须用\-转义， 因为 - 会导致成为区间选择而包含.等字符
       // 而且， - 位置不能乱放，如/[:-"]/g.test('.') 是非法正则： Uncaught SyntaxError: Invalid regular expression: /[:-"]/: Range out of order in character class
-      if (!isByValue && /[-!@#$%^&*()_+=|<>?,/\[\]\\;':"\/]/g.test(val)) {
+      if (!this.isByValue && /[-!@#$%^&*()_+=|<>?,/\[\]\\;':"\/]/g.test(val)) {
         return;
       }
       _this.$resultList.html("");
-      !isByValue ?
-        _this.mapKey(_this.objAim, val)
+      this.isByValue ?
+        _this.mapValue(_this.objAim, val)
         :
-        _this.mapValue(_this.objAim, val);
+        _this.mapKey(_this.objAim, val);
       if (_this.$resultList.children().length > 0) {
         setTimeout(function () {
           _this.$resultList.show();
           console.log("search time:" + (+new Date() - time) + " ms");
-          // console.log(_this.$resultList[0].innerHTML.match(/\%[^%]*?\%/g).join('\n').replace(/[%"']/g, ''));
         }, 0);
       } else {
         _this.$resultList.hide();
@@ -343,7 +340,7 @@
      * 获取属性值的dom
      * @return {[type]}     [description]
      */
-    getPropertyValueDom: function (propertyValue, name) {
+    getPropertyValueDom: function (propertyValue, elasticClassName) {
       var type = typeof propertyValue;
       var className = '';
       var value = '',
@@ -380,10 +377,9 @@
             break;
         }
       }
-      elementSpan.className = "value-content " + className + "_color";
+      elementSpan.className = elasticClassName + " " + className + "_color";
       elementSpan.setAttribute('data-color', className);
       elementSpan.textContent = "|[" + typeVal + "]:" + value;
-      // elementSpan.textContent = "%" + (name || "/") + "：" + value + "%";
       return elementSpan;
     },
     /**
@@ -394,7 +390,6 @@
      * @return {[type]}                dom字符串
      */
     mapKey: function (paramParentObj, paramKeywords, paramParentName) {
-      if (paramKeywords === '') { return ''; }
       var _this = this,
         tempKeywords = '<b class="redword">{#name}</b>',
         loopResultStr = _this.$resultList[0],
@@ -410,7 +405,7 @@
         if (item.search(lowerOrUpper) > -1) {
           var elementLi = document.createElement("li");
           var elementSpan = document.createElement("span");
-          elementSpan.className = "key-content";
+          elementSpan.className = "long-content";
           elementLi.setAttribute("data-property", paramParentName + item);
           if (isUpper) {
             elementSpan.innerHTML = _this.loopStr(paramParentName, paramKeywords) + _this.loopStr(item, paramKeywords);
@@ -420,7 +415,7 @@
               item.replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords));
             elementLi.appendChild(elementSpan);
           }
-          elementLi.appendChild(_this.getPropertyValueDom(paramParentObj[item], paramParentObj['name']));
+          elementLi.appendChild(_this.getPropertyValueDom(paramParentObj[item], 'shot-content'));
           loopResultStr.appendChild(elementLi);
         }
         if (isDeep &&
@@ -444,32 +439,29 @@
         isUpper = _this.$labCheckedAa.hasClass('on') ? false : true,
         isDeep = _this.$labCheckedTree.hasClass('del') ? false : true,
         regexp = new RegExp(paramKeywords, 'g'),
-        cacheValue = null;
+        cacheValue = null,
+        cacheType = '';
       paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.';
       lowerOrUpper = isUpper ? new RegExp(paramKeywords, 'i') : new RegExp(paramKeywords);
       /* 左序遍历树 */
       for (var item in paramParentObj) {
         cacheValue = paramParentObj[item];
+        cacheType = toString.call(cacheValue);
         if (!paramParentObj.hasOwnProperty(item)) { continue; } /* 主要用于清理对Array原型扩展的属性,导致for-in遍历出多余结果集bug,当然对其他类型也有效 */
-        switch (toString.call(cacheValue)) {
+        switch (cacheType) {
           case '[object String]':
           case '[object Number]':
           case '[object Boolean]':
           case '[object Null]':
-            if (cacheValue.search(lowerOrUpper) > -1) {
+            if ((cacheValue + '').search(paramKeywords) > -1) {
+              var showKey = paramParentName + item;
               var elementLi = document.createElement("li");
               var elementSpan = document.createElement("span");
-              elementSpan.className = "key-content";
-              elementLi.setAttribute("data-property", paramParentName + item);
-              if (isUpper) {
-                elementSpan.innerHTML = paramParentName + item; //_this.loopStr(paramParentName, paramKeywords) + _this.loopStr(item, paramKeywords);
-                elementLi.appendChild(elementSpan);
-              } else {
-                elementSpan.innerHTML = paramParentName.replace(regexp, tempKeywords.replace(/\{\#name\}/g, paramKeywords)) +
-                  item.replace(regexp, tempKeywords.replace(/\{\#name\}/g, paramKeywords));
-                elementLi.appendChild(elementSpan);
-              }
-              elementLi.appendChild(_this.getPropertyValueDom(paramParentObj[item], paramParentObj['name']));
+              elementSpan.className = "shot-content";
+              elementLi.setAttribute("data-property", showKey);
+              elementSpan.innerHTML = showKey;
+              elementLi.appendChild(elementSpan);
+              elementLi.appendChild(_this.getPropertyValueDom(paramParentObj[item], 'long-content'));
               loopResultStr.appendChild(elementLi);
             }
             break;
@@ -486,7 +478,7 @@
             paramParentObj[item].length > 0
           )
         ) {
-          _this.mapKey(paramParentObj[item], paramKeywords, paramParentName + item);
+          _this.mapValue(paramParentObj[item], paramKeywords, paramParentName + item);
         }
       }
     }
@@ -496,7 +488,7 @@
   /* 代码执行 */
   (function () {
     scanObject.init();
-    /* keypress 只有在可打印字符的时候才会触发，上下enter不属于这个场景，所以只需要绑定keyup即可 */
+    /* keypress 只有在可打印字符的时候才会触发，上、下、enter不属于这个场景，所以只需要绑定keyup即可 */
     window.addEventListener('keyup', function (e) {
       // if(e.keyCode === 16){ /* shift ：左右都是16 */
       //     e.preventDefault();
