@@ -127,6 +127,9 @@
           if (e.keyCode === 16) { /* shift ：左右都是16 */
             _this.shiftIsDown = false;
           }
+          if ([37, 38, 39, 40].indexOf(e.keyCode) > -1) { // 上下左右 不执行搜索
+            return;
+          }
           var val = $(this).val();
           clearTimeout(this.timeFlag);
           this.timeFlag = setTimeout(function () {
