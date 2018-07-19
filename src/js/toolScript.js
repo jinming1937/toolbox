@@ -349,45 +349,53 @@
      * @return {[type]}     [description]
      */
     getPropertyValueDom: function (propertyValue, elasticClassName) {
-      var type = typeof propertyValue;
-      var className = '';
-      var value = '',
-        typeVal = '';
-      var elementSpan = document.createElement("span");
-      if (type === 'undefined' || propertyValue === null) {
-        className = 'gray';
-        value = type === 'undefined' ? 'undefined' : 'null';
-        typeVal = type === 'undefined' ? type : 'Object';
-      } else {
-        var constructorName = propertyValue.constructor.name;
-        typeVal = constructorName;
-        value = JSON.stringify(propertyValue);
-        switch (constructorName) {
-          case 'Number':
-            className = 'blue';
-            break;
-          case 'String':
-          case 'RegExp':
-            className = 'red';
-            break;
-          case 'Boolean':
-          case 'Function':
-            className = 'purple';
-            break;
-          case 'Event':
-          case 'Date':
-          case 'Array':
-          case 'Object':
-            className = 'black';
-            break;
-          default:
-            className = 'black';
-            break;
-        }
+      var elementSpan = document.createElement("span"),
+        type = toString.call(propertyValue).replace(/\[object\s(\w+)\]/, '$1'),
+        value = propertyValue,
+        className = 'black';
+      switch (type) {
+        case 'String':
+        case 'RegExp':
+          className = 'red';
+          break;
+        case 'Number':
+          className = 'blue';
+          break;
+        case 'Boolean':
+        case 'Function':
+          className = 'purple';
+          break;
+        case 'Object':
+        case 'Array':
+        case 'Date':
+        case 'Event':
+          className = 'black';
+          break;
+        case 'Undefined':
+        case 'Null':
+          className = 'gray';
+          break;
+        default:
+          className = 'black';
+          break;
       }
+
+      switch (type) {
+        case 'Object':
+        case 'Array':
+          value = JSON.stringify(value);
+          break;
+        case 'Undefined':
+        case 'Null':
+          value = propertyValue + '';
+        default:
+          value += '';
+          break;
+      }
+
       elementSpan.className = elasticClassName + " " + className + "_color";
       elementSpan.setAttribute('data-color', className);
-      elementSpan.textContent = "|[" + typeVal + "]:" + value;
+      elementSpan.textContent = "|[" + type + "]:" + value;
       return elementSpan;
     },
     /**
