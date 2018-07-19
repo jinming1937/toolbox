@@ -436,11 +436,14 @@
         tempKeywords = '<b class="redword">{#name}</b>',
         loopResultStr = _this.$resultList[0],
         lowerOrUpper,
+        regexp = new RegExp(paramKeywords, 'g'),
         isUpper = _this.$labCheckedAa.hasClass('on') ? false : true,
         isDeep = _this.$labCheckedTree.hasClass('del') ? false : true,
-        regexp = new RegExp(paramKeywords, 'g'),
         cacheValue = null,
-        cacheType = '';
+        cacheType = '',
+        keywordsIsString = /^"/.test(paramKeywords) || /"$/.test(paramKeywords),
+        hasDoubleQuotes = /^".*"$/.test(paramKeywords),
+        isOnlyDoubleQuotes = paramKeywords === '""';
       paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.';
       lowerOrUpper = isUpper ? new RegExp(paramKeywords, 'i') : new RegExp(paramKeywords);
       /* 左序遍历树 */
@@ -450,19 +453,21 @@
         if (!paramParentObj.hasOwnProperty(item)) { continue; } /* 主要用于清理对Array原型扩展的属性,导致for-in遍历出多余结果集bug,当然对其他类型也有效 */
         switch (cacheType) {
           case '[object String]':
+            if (keywordsIsString) {
+              if (cacheValue.search(paramKeywords) > -1 ||
+                cacheValue.search(paramKeywords.replace(/^"/, '')) > -1 ||
+                cacheValue.search(paramKeywords.replace(/"$/, '')) > -1 ||
+                (hasDoubleQuotes && cacheValue.search(paramKeywords.replace(/^"/, '').replace(/"$/, '')) > -1) ||
+                (isOnlyDoubleQuotes && cacheValue === '')) {
+                _this.buildSearchResultDom(paramParentName + item, paramParentObj[item], loopResultStr);
+              }
+              break;
+            }
           case '[object Number]':
           case '[object Boolean]':
           case '[object Null]':
             if ((cacheValue + '').search(paramKeywords) > -1) {
-              var showKey = paramParentName + item;
-              var elementLi = document.createElement("li");
-              var elementSpan = document.createElement("span");
-              elementSpan.className = "shot-content";
-              elementLi.setAttribute("data-property", showKey);
-              elementSpan.innerHTML = showKey;
-              elementLi.appendChild(elementSpan);
-              elementLi.appendChild(_this.getPropertyValueDom(paramParentObj[item], 'long-content'));
-              loopResultStr.appendChild(elementLi);
+              _this.buildSearchResultDom(paramParentName + item, paramParentObj[item], loopResultStr);
             }
             break;
           default:
@@ -481,6 +486,17 @@
           _this.mapValue(paramParentObj[item], paramKeywords, paramParentName + item);
         }
       }
+    },
+    buildSearchResultDom: function (showKey, showValue, loopResultStr) {
+      var _this = this;
+      var elementLi = document.createElement("li");
+      var elementSpan = document.createElement("span");
+      elementSpan.className = "shot-content";
+      elementLi.setAttribute("data-property", showKey);
+      elementSpan.innerHTML = showKey;
+      elementLi.appendChild(elementSpan);
+      elementLi.appendChild(_this.getPropertyValueDom(showValue, 'long-content'));
+      loopResultStr.appendChild(elementLi);
     }
   };
   /* -----------[对象属性查看 end]------------ */
