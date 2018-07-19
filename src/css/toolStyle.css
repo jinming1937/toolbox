@@ -322,6 +322,10 @@ ul li {
   background: #d2d2d2
 }
 
+.box .object-scan .obj-scan .txtSearchArea .lab-tip.disabled {
+  color: #949494;
+}
+
 .hide {
   display: none
 }

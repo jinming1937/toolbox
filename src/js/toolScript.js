@@ -165,6 +165,9 @@
 
       /* 大小写是否敏感 */
       _this.$labCheckedAa.on('click', function () {
+        if ($(this).hasClass('disabled')) {
+          return;
+        }
         if ($(this).hasClass('on')) {
           $(this).removeClass('on');
         } else {
@@ -184,12 +187,14 @@
         /*重置结果列表*/
         _this.execCreateWin(_this.$searchTxt.val());
       });
-
+      /* 是否按值搜索 */
       _this.$labCheckedValue.on('click', function () {
         if ($(this).hasClass('on')) {
           $(this).removeClass('on');
+          _this.$labCheckedAa.removeClass('disabled');
           _this.isByValue = false;
         } else {
+          _this.$labCheckedAa.addClass('disabled');
           _this.isByValue = true;
           $(this).addClass('on');
         }
