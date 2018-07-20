@@ -372,6 +372,7 @@
         className = 'black';
       switch (type) {
         case 'String':
+          value = '"' + value + '"';
         case 'RegExp':
           className = 'red';
           break;
@@ -534,7 +535,7 @@
         regExp = new RegExp(searchBoxValue, 'g');
       } catch (e) {
         regExp = searchBoxValue;
-        _this.$msg_str.html("字符串不合法&nbsp;:&nbsp;" + (e.data.errorMsg || "未知的异常")).show();
+        _this.$msg_str.html("字符串不能转换为正则表达式&nbsp;:&nbsp;" + (e.data.errorMsg || "未知的异常")).show();
       }
       if (typeof regExp === 'string') { return; }
       formatValue = (showValue + '').replace(regExp, function ($1) {
