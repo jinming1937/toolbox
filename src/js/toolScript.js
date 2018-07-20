@@ -487,15 +487,15 @@
           case '[object String]':
             if (keywordsIsString) {
               if (cacheValue.indexOf(paramKeywords) > -1 ||
-                cacheValue.indexOf(paramKeywords.replace(/^"/, '')) > -1 ||
-                cacheValue.indexOf(paramKeywords.replace(/"$/, '')) > -1 ||
+                ('"' + cacheValue).indexOf(paramKeywords) > -1 ||
+                (cacheValue + '"').indexOf(paramKeywords) > -1 ||
                 isOnlyDoubleQuotes && cacheValue === '' ||
-                !isOnlyDoubleQuotes && hasDoubleQuotes && cacheValue === paramKeywords.replace(/^"/, '').replace(/"$/, '')) {
-                _this.buildSearchResultDom(paramParentName + item, cacheValue, paramKeywords, loopResultStr);
+                !isOnlyDoubleQuotes && hasDoubleQuotes && cacheValue === paramKeywords.replace(/^"|"$/g, '')) {
+                _this.buildSearchResultDom(paramParentName + item, '"' + cacheValue + '"', paramKeywords, loopResultStr);
               }
             } else {
               if ((cacheValue + '').indexOf(paramKeywords) > -1) {
-                _this.buildSearchResultDom(paramParentName + item, cacheValue, paramKeywords, loopResultStr);
+                _this.buildSearchResultDom(paramParentName + item, '"' + cacheValue + '"', paramKeywords, loopResultStr);
               }
             }
             break;
