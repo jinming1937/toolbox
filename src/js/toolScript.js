@@ -1,6 +1,5 @@
 !(function ($) {
   if (typeof $ === 'undefined') { return; }
-  //index.html
   /* -----------[对象属性查看 start]------------ */
   var scanObject = {
     /**
@@ -58,7 +57,6 @@
       };
       _this.fastParseWorker.onerror = function () {
         _this.aimId = 0;
-        // console.log(event);
         _this.$progressSucc.hide();
         _this.$progressRate.hide();
         _this.$msg_str.show();
@@ -124,7 +122,7 @@
               "";
             } else if (e.keyCode === 189 && _this.shiftIsDown) { /* -_ : 189 ,单独触发_ ,不允许- */
               "";
-            } else if ([37, 38, 39, 40].indexOf(e.keyCode) > -1) { /* 37左38上39右40下 */
+            } else if ([37, 38, 39, 40].indexOf(e.keyCode) > -1) { /* 37：左，38：上，39：右，40：下 */
               "";
             } else {
               e.preventDefault();
@@ -136,7 +134,6 @@
           if (e.keyCode === 16) { /* shift ：左右都是16 */
             _this.shiftIsDown = false;
           }
-          console.log(e.keyCode);
           if ([38, 40].indexOf(e.keyCode) > -1) { // 上下 尝试去弹层上
             if (_this.$resultList.children().length <= 0) { return; }
             _this.$resultList[0].focus();
@@ -229,9 +226,7 @@
      */
     bindWinEvent: function (e) {
       var _this = this;
-      // if (_this.$resultList.children().length <= 0) { return; }
       if (e.keyCode === 38 || e.keyCode === 40) { /* 上下键逻辑：如果结果弹层出现，捕捉键盘上下键，立即给使弹层获取焦点 */
-        // _this.$resultList[0].focus();
         var hasOnCount = _this.$resultList.find('li.on').length;
         if (e.keyCode === 40 && _this.$resultList.html().length > 0) { /* 按‘下’，如果列表没有选中的，则默认第一个选中，最后一个选中时，仍然按‘下’，不执行操作  */
           if (hasOnCount < 1) {
@@ -249,7 +244,7 @@
         }
         e.preventDefault();
       } else if (e.keyCode === 13) { /* enter 键逻辑：执行选中的逻辑 */
-        if (_this.$resultList.find('li.on').length <= 0) {
+        if (hasOnCount <= 0) {
           return;
         }
         _this.execSelect();
