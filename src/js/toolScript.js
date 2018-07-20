@@ -101,7 +101,16 @@
         }
       });
 
+      $(document).on('click', function (e) {
+        if (e.target.className.search('searchTxt') === -1) {
+          _this.$resultList.hide();
+        }
+      });
+
       _this.$searchTxt.on("focus", function () {
+        if (_this.$resultList.children().length > 0) {
+          _this.$resultList.show();
+        }
         /* 关键字输入框 */
         _this.$searchTxt.on('keydown', function (e) {
           if (e.keyCode === 16) {
@@ -115,7 +124,7 @@
               "";
             } else if (e.keyCode === 189 && _this.shiftIsDown) { /* -_ : 189 ,单独触发_ ,不允许- */
               "";
-            } else if (e.keyCode === 37 || e.keyCode === 39) { /* 左右 */
+            } else if ([37, 38, 39, 40].indexOf(e.keyCode) > -1) { /* 37左38上39右40下 */
               "";
             } else {
               e.preventDefault();
@@ -127,7 +136,14 @@
           if (e.keyCode === 16) { /* shift ：左右都是16 */
             _this.shiftIsDown = false;
           }
-          if ([37, 38, 39, 40].indexOf(e.keyCode) > -1) { // 上下左右 不执行搜索
+          console.log(e.keyCode);
+          if ([38, 40].indexOf(e.keyCode) > -1) { // 上下 尝试去弹层上
+            if (_this.$resultList.children().length <= 0) { return; }
+            _this.$resultList[0].focus();
+            _this.bindWinEvent(e);
+            return;
+          }
+          if ([37, 39].indexOf(e.keyCode) > -1) { // 左右 不执行搜索
             return;
           }
           var val = $(this).val();
@@ -161,6 +177,10 @@
         $('body').css('overflow', 'hidden');
       }).on('blur', function () {
         $('body').css('overflow', 'auto');
+      });
+
+      _this.$resultList.on('keyup', function (e) {
+        _this.bindWinEvent(e);
       });
 
       /* 大小写是否敏感 */
@@ -209,9 +229,9 @@
      */
     bindWinEvent: function (e) {
       var _this = this;
-      if (_this.$resultList.children().length <= 0) { return; }
+      // if (_this.$resultList.children().length <= 0) { return; }
       if (e.keyCode === 38 || e.keyCode === 40) { /* 上下键逻辑：如果结果弹层出现，捕捉键盘上下键，立即给使弹层获取焦点 */
-        _this.$resultList[0].focus();
+        // _this.$resultList[0].focus();
         var hasOnCount = _this.$resultList.find('li.on').length;
         if (e.keyCode === 40 && _this.$resultList.html().length > 0) { /* 按‘下’，如果列表没有选中的，则默认第一个选中，最后一个选中时，仍然按‘下’，不执行操作  */
           if (hasOnCount < 1) {
@@ -520,15 +540,10 @@
   /* 代码执行 */
   (function () {
     scanObject.init();
-    /* keypress 只有在可打印字符的时候才会触发，上、下、enter不属于这个场景，所以只需要绑定keyup即可 */
-    window.addEventListener('keyup', function (e) {
-      // if(e.keyCode === 16){ /* shift ：左右都是16 */
-      //     e.preventDefault();
-      //     scanObject.shiftIsDown = false;
-      //     return;
-      // }
-      scanObject.bindWinEvent(e);
-      e.preventDefault(e);
-    });
+    /* keypress 只有在可打印字符的按键才会触发，上、下、enter不属于这个场景，所以只需要绑定keyup即可 */
+    // window.addEventListener('keyup', function (e) {
+    //   scanObject.bindWinEvent(e);
+    //   e.preventDefault(e);
+    // });
   }());
 }(window.$ || undefined));
