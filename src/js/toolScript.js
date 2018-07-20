@@ -204,12 +204,14 @@
         /*重置结果列表*/
         _this.execCreateWin(_this.$searchTxt.val());
       });
+
       /* 是否按值搜索 */
       _this.$labCheckedValue.on('click', function () {
         if ($(this).hasClass('on')) {
           $(this).removeClass('on');
           _this.$labCheckedAa.removeClass('disabled');
           _this.isByValue = false;
+          _this.$searchTxt.val('');
         } else {
           _this.$labCheckedAa.addClass('disabled');
           _this.isByValue = true;
@@ -315,6 +317,7 @@
      */
     execCreateWin: function (val) {
       var _this = this;
+      _this.$resultList.html("");
       if (_this.objAim === null || val === '') {
         return;
       }
@@ -325,7 +328,6 @@
       if (!this.isByValue && /[-!@#$%^&*()_+=|<>?,/\[\]\\;':"\/]/g.test(val)) {
         return;
       }
-      _this.$resultList.html("");
       this.isByValue ?
         _this.mapValue(_this.objAim, val)
         :
@@ -466,17 +468,13 @@
       var _this = this,
         tempKeywords = '<b class="redword">{#name}</b>',
         loopResultStr = _this.$resultList[0],
-        lowerOrUpper,
-        regexp = new RegExp(paramKeywords, 'g'),
-        isUpper = _this.$labCheckedAa.hasClass('on') ? false : true,
         isDeep = _this.$labCheckedTree.hasClass('del') ? false : true,
         cacheValue = null,
         cacheType = '',
         keywordsIsString = /^"/.test(paramKeywords) || /"$/.test(paramKeywords),
-        hasDoubleQuotes = /^".*"$/.test(paramKeywords),
+        hasDoubleQuotes = /^"/.test(paramKeywords) && /"$/.test(paramKeywords), //
         isOnlyDoubleQuotes = paramKeywords === '""';
       paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.';
-      lowerOrUpper = isUpper ? new RegExp(paramKeywords, 'i') : new RegExp(paramKeywords);
       /* 左序遍历树 */
       for (var item in paramParentObj) {
         cacheValue = paramParentObj[item];
@@ -488,8 +486,8 @@
               if (cacheValue.search(paramKeywords) > -1 ||
                 cacheValue.search(paramKeywords.replace(/^"/, '')) > -1 ||
                 cacheValue.search(paramKeywords.replace(/"$/, '')) > -1 ||
-                (hasDoubleQuotes && cacheValue.search(paramKeywords.replace(/^"/, '').replace(/"$/, '')) > -1) ||
-                (isOnlyDoubleQuotes && cacheValue === '')) {
+                isOnlyDoubleQuotes && cacheValue === '' ||
+                !isOnlyDoubleQuotes && hasDoubleQuotes && cacheValue === paramKeywords.replace(/^"/, '').replace(/"$/, '')) {
                 _this.buildSearchResultDom(paramParentName + item, paramParentObj[item], loopResultStr);
               }
               break;
