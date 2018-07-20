@@ -365,7 +365,7 @@
      * 获取属性值的dom
      * @return {[type]}     [description]
      */
-    getPropertyValueDom: function (propertyValue, elasticClassName) {
+    getPropertyValueDom: function (propertyValue, elasticClassName, formatValue) {
       var elementSpan = document.createElement("span"),
         type = toString.call(propertyValue).replace(/\[object\s(\w+)\]/, '$1'),
         value = propertyValue,
@@ -412,7 +412,11 @@
 
       elementSpan.className = elasticClassName + " " + className + "_color";
       elementSpan.setAttribute('data-color', className);
-      elementSpan.textContent = "|[" + type + "]:" + value;
+      if (!formatValue) {
+        elementSpan.textContent = "|[" + type + "]:" + value;
+      } else {
+        elementSpan.innerHTML = "|[" + type + "]:" + formatValue;
+      }
       return elementSpan;
     },
     /**
@@ -466,13 +470,12 @@
     },
     mapValue: function (paramParentObj, paramKeywords, paramParentName) {
       var _this = this,
-        tempKeywords = '<b class="redword">{#name}</b>',
         loopResultStr = _this.$resultList[0],
         isDeep = _this.$labCheckedTree.hasClass('del') ? false : true,
         cacheValue = null,
         cacheType = '',
         keywordsIsString = /^"/.test(paramKeywords) || /"$/.test(paramKeywords),
-        hasDoubleQuotes = /^"/.test(paramKeywords) && /"$/.test(paramKeywords), //
+        hasDoubleQuotes = /^"/.test(paramKeywords) && /"$/.test(paramKeywords),
         isOnlyDoubleQuotes = paramKeywords === '""';
       paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.';
       /* 左序遍历树 */
@@ -483,20 +486,24 @@
         switch (cacheType) {
           case '[object String]':
             if (keywordsIsString) {
-              if (cacheValue.search(paramKeywords) > -1 ||
-                cacheValue.search(paramKeywords.replace(/^"/, '')) > -1 ||
-                cacheValue.search(paramKeywords.replace(/"$/, '')) > -1 ||
+              if (cacheValue.indexOf(paramKeywords) > -1 ||
+                cacheValue.indexOf(paramKeywords.replace(/^"/, '')) > -1 ||
+                cacheValue.indexOf(paramKeywords.replace(/"$/, '')) > -1 ||
                 isOnlyDoubleQuotes && cacheValue === '' ||
                 !isOnlyDoubleQuotes && hasDoubleQuotes && cacheValue === paramKeywords.replace(/^"/, '').replace(/"$/, '')) {
-                _this.buildSearchResultDom(paramParentName + item, paramParentObj[item], loopResultStr);
+                _this.buildSearchResultDom(paramParentName + item, cacheValue, paramKeywords, loopResultStr);
               }
-              break;
+            } else {
+              if ((cacheValue + '').indexOf(paramKeywords) > -1) {
+                _this.buildSearchResultDom(paramParentName + item, cacheValue, paramKeywords, loopResultStr);
+              }
             }
+            break;
           case '[object Number]':
           case '[object Boolean]':
           case '[object Null]':
-            if ((cacheValue + '').search(paramKeywords) > -1) {
-              _this.buildSearchResultDom(paramParentName + item, paramParentObj[item], loopResultStr);
+            if (!keywordsIsString && (cacheValue + '').indexOf(paramKeywords) > -1) {
+              _this.buildSearchResultDom(paramParentName + item, cacheValue, paramKeywords, loopResultStr);
             }
             break;
           default:
@@ -504,27 +511,41 @@
         }
 
         if (isDeep &&
-          typeof paramParentObj[item] === 'object' &&
-          paramParentObj[item] !== null &&
+          typeof cacheValue === 'object' &&
+          cacheValue !== null &&
           (
-            paramParentObj[item].constructor.name === 'Object' ||
-            paramParentObj[item].constructor.name === 'Array' &&
-            paramParentObj[item].length > 0
+            cacheValue.constructor.name === 'Object' ||
+            cacheValue.constructor.name === 'Array' &&
+            cacheValue.length > 0
           )
         ) {
-          _this.mapValue(paramParentObj[item], paramKeywords, paramParentName + item);
+          _this.mapValue(cacheValue, paramKeywords, paramParentName + item);
         }
       }
     },
-    buildSearchResultDom: function (showKey, showValue, loopResultStr) {
+    buildSearchResultDom: function (showKey, showValue, searchBoxValue, loopResultStr) {
       var _this = this;
+      var tempKeywords = '<b class="redword">{#name}</b>';
+      var regExp = null;
       var elementLi = document.createElement("li");
       var elementSpan = document.createElement("span");
+      var formatValue = '';
+      try {
+        regExp = new RegExp(searchBoxValue, 'g');
+      } catch (e) {
+        regExp = searchBoxValue;
+        _this.$msg_str.html("字符串不合法&nbsp;:&nbsp;" + (e.data.errorMsg || "未知的异常")).show();
+      }
+      if (typeof regExp === 'string') { return; }
+      formatValue = (showValue + '').replace(regExp, function ($1) {
+        return tempKeywords.replace(/\{\#name\}/, $1);
+      });
+
       elementSpan.className = "shot-content";
       elementLi.setAttribute("data-property", showKey);
       elementSpan.innerHTML = showKey;
       elementLi.appendChild(elementSpan);
-      elementLi.appendChild(_this.getPropertyValueDom(showValue, 'long-content'));
+      elementLi.appendChild(_this.getPropertyValueDom(showValue, 'long-content', formatValue));
       loopResultStr.appendChild(elementLi);
     }
   };
