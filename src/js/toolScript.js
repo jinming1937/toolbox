@@ -269,9 +269,9 @@
           pNameArray = propertyName.split('.'),
           num = pNameArray.length;
         if (num > 1) {
-          val = getValue(obj[pNameArray.shift()], pNameArray.join('.'));
+          val = getValue(obj[pNameArray.shift().replace(/@@/g, '.')], pNameArray.join('.'));
         } else {
-          val = obj[propertyName];
+          val = obj[propertyName.replace(/@@/g, '.')];
         }
         return val;
       };
@@ -279,7 +279,7 @@
       cacheValue = getValue(_this.objAim, propertyName)
       value = JSON.stringify(cacheValue);
       clearClassName = _this.$printPropertyValue[0].className.match(/\w+\_color/g) || [""];
-      _this.$printPropertyName.html(propertyName); //('&gt;&nbsp;' + propertyName);
+      _this.$printPropertyName.html(propertyName.replace(/@@/g, '.')); //('&gt;&nbsp;' + propertyName);
       _this.$printPropertyValue.removeClass(clearClassName[0]).addClass(className + "_color");
       _this.$resultList.hide().html('');
       _this.$searchTxt.val('');
@@ -433,23 +433,25 @@
         loopResultStr = _this.$resultList[0],
         lowerOrUpper,
         isUpper = _this.$labCheckedAa.hasClass('on') ? false : true,
-        isDeep = _this.$labCheckedTree.hasClass('del') ? false : true;
+        isDeep = _this.$labCheckedTree.hasClass('del') ? false : true,
+        dataProperty = '';
       paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.';
       lowerOrUpper = isUpper ? new RegExp(paramKeywords, 'i') : new RegExp(paramKeywords);
 
       /* 左序遍历树 */
       for (var item in paramParentObj) {
+        dataProperty = paramParentName + item.replace(/\./g, '@@');
         if (!paramParentObj.hasOwnProperty(item)) { continue; } /* 主要用于清理对Array原型扩展的属性,导致for-in遍历出多余结果集bug,当然对其他类型也有效 */
         if (item.search(lowerOrUpper) > -1) {
           var elementLi = document.createElement("li");
           var elementSpan = document.createElement("span");
           elementSpan.className = "long-content";
-          elementLi.setAttribute("data-property", paramParentName + item);
+          elementLi.setAttribute("data-property", dataProperty);
           if (isUpper) {
-            elementSpan.innerHTML = _this.loopStr(paramParentName, paramKeywords) + _this.loopStr(item, paramKeywords);
+            elementSpan.innerHTML = _this.loopStr(paramParentName.replace(/@@/g, '.'), paramKeywords) + _this.loopStr(item, paramKeywords);
             elementLi.appendChild(elementSpan);
           } else {
-            elementSpan.innerHTML = paramParentName.replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords)) +
+            elementSpan.innerHTML = paramParentName.replace(/@@/g, '.').replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords)) +
               item.replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords));
             elementLi.appendChild(elementSpan);
           }
@@ -465,7 +467,7 @@
             paramParentObj[item].length > 0
           )
         ) {
-          _this.mapKey(paramParentObj[item], paramKeywords, paramParentName + item);
+          _this.mapKey(paramParentObj[item], paramKeywords, dataProperty);
         }
       }
     },
@@ -477,12 +479,14 @@
         cacheType = '',
         keywordsIsString = /^"/.test(paramKeywords) || /"$/.test(paramKeywords),
         hasDoubleQuotes = /^"/.test(paramKeywords) && /"$/.test(paramKeywords),
-        isOnlyDoubleQuotes = paramKeywords === '""';
+        isOnlyDoubleQuotes = paramKeywords === '""',
+        dataProperty = '';
       paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.';
       /* 左序遍历树 */
       for (var item in paramParentObj) {
         cacheValue = paramParentObj[item];
         cacheType = toString.call(cacheValue);
+        dataProperty = paramParentName + item.replace(/\./g, '@@');
         if (!paramParentObj.hasOwnProperty(item)) { continue; } /* 主要用于清理对Array原型扩展的属性,导致for-in遍历出多余结果集bug,当然对其他类型也有效 */
         switch (cacheType) {
           case '[object String]':
@@ -492,11 +496,11 @@
                 (cacheValue + '"').indexOf(paramKeywords) > -1 ||
                 isOnlyDoubleQuotes && cacheValue === '' ||
                 !isOnlyDoubleQuotes && hasDoubleQuotes && cacheValue === paramKeywords.replace(/^"|"$/g, '')) {
-                _this.buildSearchResultDom(paramParentName + item, '"' + cacheValue + '"', paramKeywords, loopResultStr);
+                _this.buildSearchResultDom(dataProperty, '"' + cacheValue + '"', paramKeywords, loopResultStr);
               }
             } else {
               if ((cacheValue + '').indexOf(paramKeywords) > -1) {
-                _this.buildSearchResultDom(paramParentName + item, '"' + cacheValue + '"', paramKeywords, loopResultStr);
+                _this.buildSearchResultDom(dataProperty, '"' + cacheValue + '"', paramKeywords, loopResultStr);
               }
             }
             break;
@@ -504,7 +508,7 @@
           case '[object Boolean]':
           case '[object Null]':
             if (!keywordsIsString && (cacheValue + '').indexOf(paramKeywords) > -1) {
-              _this.buildSearchResultDom(paramParentName + item, cacheValue, paramKeywords, loopResultStr);
+              _this.buildSearchResultDom(dataProperty, cacheValue, paramKeywords, loopResultStr);
             }
             break;
           default:
@@ -520,7 +524,7 @@
             cacheValue.length > 0
           )
         ) {
-          _this.mapValue(cacheValue, paramKeywords, paramParentName + item);
+          _this.mapValue(cacheValue, paramKeywords, dataProperty);
         }
       }
     },
@@ -544,7 +548,7 @@
 
       elementSpan.className = "shot-content";
       elementLi.setAttribute("data-property", showKey);
-      elementSpan.innerHTML = showKey;
+      elementSpan.innerHTML = showKey.replace(/@@/g, '.');
       elementLi.appendChild(elementSpan);
       elementLi.appendChild(_this.getPropertyValueDom(showValue, 'long-content', formatValue));
       loopResultStr.appendChild(elementLi);
