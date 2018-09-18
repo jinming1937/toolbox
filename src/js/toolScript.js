@@ -271,7 +271,10 @@
         if (num > 1) {
           val = getValue(obj[pNameArray.shift().replace(/@@/g, '.')], pNameArray.join('.'));
         } else {
-          val = obj[propertyName.replace(/@@/g, '.')];
+          val = _this.isByValue ?
+            obj //[propertyName.replace(/@@/g, '.').replace(/(.*)\..*/, '$1')]
+            :
+            obj[propertyName.replace(/@@/g, '.')];
         }
         return val;
       };
