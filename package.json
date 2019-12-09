@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/jinming1937/toolbox/issues"
   },
-  "homepage": "https://github.com/jinming1937/toolbox#readme"
+  "homepage": "https://github.com/jinming1937/toolbox#readme",
+  "dependencies": {
+    "ykit": "^0.8.10"
+  }
 }

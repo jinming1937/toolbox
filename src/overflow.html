@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <style>
+        .base-wrap {
+            overflow: hidden;
+        }
+        .base-wrap:hover{
+            overflow: visible;  
+        }
+        .base:hover {
+            background: burlywood;
+            position: relative;
+            
+        }
+        .base:hover::after {
+            content: "123456789";
+            position: absolute;
+            color: #FFF;
+            top: -20px;
+            left: 0;
+            background-color: #101010;
+            z-index: 10000;
+        }
+
+
+        .base-wrap1 {
+            overflow-x: scroll;
+            width: 80px;
+            height: 50px;
+            border:1px solid #101010;
+            background-color: beige;
+        }
+        .base1:hover {
+            background: burlywood;
+            position: relative;
+            
+        }
+        .base1:hover::after {
+            content: "123456789";
+            position: absolute;
+            color: #FFF;
+            top: -20px;
+            left: 0;
+            background-color: #101010;
+            z-index: 10000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>hidden
+        <div class="base-wrap">
+            <div class="base">
+                123456789
+            </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>scroll
+        <div class="base-wrap1">
+            <div class="base1">
+                98765432112345678987654321234567
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

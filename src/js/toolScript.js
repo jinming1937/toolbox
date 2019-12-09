@@ -328,7 +328,8 @@
       // 这里开个挂(\.)点作为一个全匹配,偷偷保留
       // 注意： - 必须用\-转义， 因为 - 会导致成为区间选择而包含.等字符
       // 而且， - 位置不能乱放，如/[:-"]/g.test('.') 是非法正则： Uncaught SyntaxError: Invalid regular expression: /[:-"]/: Range out of order in character class
-      if (!this.isByValue && /[-!@#$%^&*()_+=|<>?,/\[\]\\;':"\/]/g.test(val)) {
+      // _ 下划线可作为搜索属性
+      if (!this.isByValue && /[-!@#$%^&*()+=|<>?,/\[\]\\;':"\/]/g.test(val)) {
         return;
       }
       this.isByValue ?
