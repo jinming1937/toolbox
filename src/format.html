@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="keywords" content="URL解析,JSON格式化,JSON parse,小鱼蛋糕">
+  <meta name="description" content="URL解析,JSON格式化,JSON parse,小鱼蛋糕">
+  <meta name="robots" content="all">
+  <meta name="author" content="jinming,jinming1937@163.com">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport"
+    content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="full-screen" content="yes" />
+  <meta name="browsermode" content="application" />
+  <title>URL解析</title>
+  <link rel="stylesheet" type="text/css" href="css/decode.css" />
+  <style>
+    .main {
+      height: 600px;
+    }
+
+    .origin_string,
+    .new_string {
+      height: 36px;
+      width: 200px;
+    }
+
+    .flexBox {
+      display: flex;
+    }
+
+    .flexBox>div:first-child {
+      width: 100px;
+      line-height: 1;
+    }
+
+    .flexBox>div:not(:first-child) {
+      flex: 1;
+    }
+    #box{
+        display: flex;
+        display: -webkit-flex;
+        border: 1px solid #0000FF;
+        height: 200px;
+        width: 400px;
+        align-items:center;
+        justify-content:center;
+    }
+    .item{
+        width: 50px;
+        height: 40px;
+        border: 1px solid #00C1B3;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <nav class="nav-bar">
+      <h3>字符串转换</h3>
+      <a class="nav-to" href="./json.html" style="right: 120px;">JSON大工作区&gt;&gt;</a>
+      <a class="nav-to" href="./bc/index.html">N年前的小示例&gt;&gt;</a>
+      <hr>
+    </nav>
+    <main class="main">
+      <label for="cbxNeedClear">
+        是否在离开（失焦）时擦除
+        <input type="checkbox" id="cbxNeedClear" value="true" checked />
+      </label>
+      <br />
+      <div>
+        <h3>间隔线转驼峰</h3>
+        <div class="flexBox">
+          <div>origin:</div>
+          <div>
+            <input type="text" class="origin_string" id="originString" placeholder="粘贴到此次处" />
+            <input type="text" class="origin_string" id="originDisabledString" disabled placeholder="备份回看" />
+          </div>
+        </div>
+        <br />
+        <div class="flexBox">
+          <div>new:</div>
+          <div>
+            <input type="text" class="new_string" id="newString" placeholder="转换结果..." />
+            <input type="button" class="" id="copeOrigin" value="📚" />
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div>
+        <h3>驼峰转间隔线</h3>
+        <div class="flexBox">
+          <div>分隔符</div>
+          <div>
+            <select id="splitModule">
+              <option value="_">下划线 _</option>
+              <option value="-">中划线 -</option>
+            </select>
+          </div>
+        </div>
+        <br />
+        <div class="flexBox">
+          <div>origin:</div>
+          <div>
+            <input type="text" class="origin_string" id="cameOriginString" placeholder="粘贴到此次处" />
+            <input type="text" class="origin_string" id="cameOriginDisabledString" disabled placeholder="备份回看" />
+          </div>
+        </div>
+          <br />
+        <div class="flexBox">
+          <div>new:</div>
+            <div>
+              <input type="text" class="new_string" id="cameNewString" placeholder="转换结果..." />
+              <input type="button" class="" id="copeCame" value="📚" />
+            </div>
+        </div>
+
+        <!-- <div id="box">
+            <div class="item">1</div>
+            <div class="item">2</div>
+            <div class="item">3</div>
+            <div class="item">4</div>
+            <div class="item">5</div>
+        </div> -->
+    </main>
+    <footer class="">
+      <hr>
+      <ul>
+        <li>
+          <small> jin © 2017 |</small>
+        </li>
+        <li>
+          <small>
+            <a href="javascript:void(0);">jinming1937@163.com</a>
+          </small>
+        </li>
+      </ul>
+      <small>^^^^^^^^^^^^^^^^^^^^^^^^^^^^^</small>
+    </footer>
+  </div>
+  <script src="js/format.js"></script>
+</body>
+
+</html>
