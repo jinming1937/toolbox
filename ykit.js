@@ -7,23 +7,15 @@ module.exports = {
   plugins: [],
   config: {
     exports: [
-      // './style/base',
-      // css
-      // './css/base.css',
       './css/decode.css',
       './css/differ.css',
       './css/toolStyle.css',
-
-
       './js/decode.js',
       './js/differ.js',
       './js/fastParse.js',
       './js/toolScript.js',
     ],
     modifyWebpackConfig: function (config) {
-      // edit ykit's Webpack configs
-      console.log(this.env); // local
-
       return config;
     }
   },
