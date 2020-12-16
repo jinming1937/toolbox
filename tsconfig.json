@@ -1,0 +1,29 @@
+
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "strict": true,
+    "rootDir": ".",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "removeComments": true,
+    "preserveSymlinks": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "baseUrl": "./",
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    }
+  },
+  "exclude": []
+}

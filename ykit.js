@@ -7,13 +7,13 @@ module.exports = {
   plugins: [],
   config: {
     exports: [
-      './css/decode.css',
-      './css/differ.css',
-      './css/toolStyle.css',
-      './js/decode.js',
-      './js/differ.js',
-      './js/fastParse.js',
-      './js/toolScript.js',
+      // './css/decode.css',
+      // './css/differ.css',
+      // './css/toolStyle.css',
+      // './js/decode.js',
+      // './js/differ.js',
+      // './js/fastParse.js',
+      // './js/toolScript.js',
     ],
     modifyWebpackConfig: function (config) {
       return config;
