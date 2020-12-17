@@ -1,4 +1,8 @@
 module.exports = {
+  root: true,
+  // parserOptions: {
+  //   parser: 'babel-eslint'
+  // },
   extends: [
     'plugin:prettier/recommended',
     'eslint-config-alloy',
@@ -6,9 +10,11 @@ module.exports = {
     'eslint-config-alloy/typescript',
   ],
   env: {
-    'jest/globals': true,
+    es6: true,
+    'amd': true,
+    'commonjs': true,
   },
-  plugins: ['jest', 'prettier'],
+  plugins: ['prettier'],
   globals: {
     // 这里填入你的项目需要的全局变量
     // 这里值为 false 表示这个全局变量不允许被重新赋值，比如：
@@ -23,6 +29,7 @@ module.exports = {
     jestPuppeteer: true,
   },
   rules: {
+    "prettier/prettier": "error",
     // @fixable 一个缩进必须用两个空格替代
     // indent: [
     //   'error',

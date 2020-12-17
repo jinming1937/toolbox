@@ -37,6 +37,15 @@ export default {
 	},
 	module: {
 		rules: [
+      {
+        test: /\.(js|mjs|jsx|ts|tsx)$/,
+        loader: 'eslint-loader',
+        enforce: 'pre',
+        include: [path.join(__dirname, 'src')],
+        options: {
+            fix: true
+        }
+      },
 			{
 				test: /\.(js|mjs|jsx|ts|tsx)$/,
 				use: [
