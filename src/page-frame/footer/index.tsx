@@ -16,7 +16,6 @@ export class Footer extends React.Component<FooterProps, FooterState> {
   render() {
     return (
       <footer className={styles.footer}>
-        <hr />
         <ul>
           <li>
             <small> 小鱼工具 © 2020 |</small>

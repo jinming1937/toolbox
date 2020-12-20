@@ -25,7 +25,6 @@ export const FormatVariable = (props: IFormatVariable) => {
   const [formatedValue, setFormatedValue] = useState('');
   const [lineType, setLineType] = useState('_');
   const [copyState, setCopyState] = useState(false);
-  const resultRef = useRef(null);
   const originRef = useRef<null | HTMLInputElement>(null);
 
   const onClearControlChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +36,7 @@ export const FormatVariable = (props: IFormatVariable) => {
     setLineType(e.currentTarget.value);
   }, [lineType]);
 
-  const onOriginValueChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+  const onOriginValueChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setOriginValue(e.currentTarget.value);
   }, [originValue]);
 
@@ -96,16 +95,16 @@ export const FormatVariable = (props: IFormatVariable) => {
         : null
       }
       <div className={styles.flexBox}>
-        <div className={styles.label}>origin:</div>
+        <div className={styles.label}>原标识符:</div>
         <div className={styles.container}>
           <input value={originValue} ref={originRef} onChange={onOriginValueChange} onPaste={onOriginValuePaste} onBlur={onOriginValueBlur} type="text" className={styles.inputText} placeholder="粘贴到此次处" />
           <input defaultValue={originValue} type="text" className={styles.inputText} disabled placeholder="备份回看" />
         </div>
       </div>
       <div className={styles.flexBox}>
-        <div className={styles.label}>new:</div>
+        <div className={styles.label}>新标识符:</div>
         <div className={styles.container}>
-          <input defaultValue={formatedValue} ref={resultRef} type="text" className={styles.inputText} placeholder="转换结果..." disabled />
+          <input defaultValue={formatedValue} type="text" className={styles.inputText} placeholder="转换结果..." disabled />
           <CopyToClipboard text={formatedValue} onCopy={handleCopy}>
             <input type="button" className={styles.inputBtn} value={`点此复制${copyState ? '√':' '}`} onClick={onCopyClick} />
           </CopyToClipboard>

@@ -129,3 +129,7 @@ declare module '*.xml' {
   const src: string;
   export default src;
 }
+
+declare interface Window {
+  BiQi: any;
+}

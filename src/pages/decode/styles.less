@@ -1,0 +1,77 @@
+@import '../../theme/basic.less';
+
+.main-box {
+  padding: 16px;
+  font-size: 14px;
+  color: #333;
+
+  .context {
+
+    .textarea-face {
+      line-height: 1;
+
+      .parse-url-area {
+        padding: 8px;
+        resize: none;
+        width: 100%;
+        border: 1px solid @sketch-color-s1;
+        border-radius: 4px;
+        &:focus {
+          border: 1px solid @tool-box-weight-color;
+        }
+      }
+    }
+
+    .tool-cbx {
+      width: 14px;
+      height: 14px;
+      margin-right: 20px;
+    }
+
+    .tool-lab {
+      user-select: none;
+      cursor: pointer;
+      vertical-align: middle
+    }
+  }
+
+  .param-plugs {
+    display: flex;
+
+    .using {
+      flex: .6;
+
+      .param-to-json {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid @sketch-color-s1;
+        display: inline-block;
+        height: 280px;
+        resize: none;
+        overflow-y: scroll;
+        border-radius: 4px;
+      }
+    }
+
+    .count {
+      flex: .4;
+      margin-left: 10px;
+
+      .param-data li {
+        width: 100%;
+
+        .data-name {
+          width: 30%;
+        }
+
+        .data-name::before {
+          width: 10px;
+          height: 10px;
+          border-top: 3px;
+          border-right: 3px;
+          background: #000;
+        }
+      }
+    }
+  }
+}

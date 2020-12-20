@@ -61,46 +61,35 @@ export default {
             },
           }
 				],
-				// include: [resolve('src'), resolve('packages')],
-				// exclude: [resolve('node_modules')],
-			},
+				include: [resolve('src')],
+				exclude: [resolve('node_modules')],
+      },
 			{
 				test: /\.less$/,
 				use: ExtractTextPlugin.extract({
 					fallback: 'style-loader',
 					use: [
-						{
-							loader: 'css-loader',
-							options: {
-								modules: true,
-							},
-						},
-						{
-							loader: 'less-loader',
-							options: {
-                modules: true,
-							},
-						},
-					],
-				}),
+						{loader: 'css-loader', options: {modules: true}},
+						{loader: 'less-loader', options: {modules: true}},
+          ],
+        }),
+        include: [resolve('src')],
 			},
 			{
 				test: /\.css$/,
 				use: ExtractTextPlugin.extract({
 					fallback: 'style-loader',
-					use: [
-						{
-							loader: 'css-loader',
-							options: {
-								modules: true,
-							},
-						},
-					],
-				}),
+					use: [{loader: 'css-loader'}],
+        }),
+        include: [resolve('node_modules')],
 			},
 			{
-				test: /\.md(\?.*)?$/,
-				loaders: ['html-loader', 'markdown-loader'],
+				test: /\.css$/,
+				use: ExtractTextPlugin.extract({
+					fallback: 'style-loader',
+					use: [{loader: 'css-loader', options: {modules: true}}],
+        }),
+        exclude: [resolve('node_modules')],
 			},
 			{
 				test: /\.(jpeg|jpg|png|gif|svg)$/,

@@ -10,7 +10,6 @@ module.exports = {
     'eslint-config-alloy/typescript',
   ],
   env: {
-    es6: true,
     'amd': true,
     'commonjs': true,
   },

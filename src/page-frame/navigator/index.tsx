@@ -13,16 +13,6 @@ export class Navigator extends React.Component<NavigatorProps> {
   }
 
   ref = (ref: any) => (this.navRef = ref);
-  pointerHandler = () => {
-    if(this.navRef !== null) {
-      if(this.navRef.style.offsetHeight === 0) {
-        this.navRef.style.height = 5 * 24 + 'px';
-      } else {
-        this.navRef.style.height = '0';
-      }
-    }
-  };
-
   resize = () => {
     console.log('window is resizing...', window.innerWidth)
     if(this.ref !== null) {
@@ -53,12 +43,11 @@ export class Navigator extends React.Component<NavigatorProps> {
   render() {
     return (
       <nav className={styles.navigator}>
-        <div className={styles.logo}>小鱼工具</div>
-        <div className={styles.navListBox}>
-          <ul className={styles.navList} ref={this.ref}>{this.renderNav()}</ul>
-        </div>
-        <div className={styles.linePoint + ' ' + styles.linePointAction}>
-          <span className={styles.pointer} onClick={this.pointerHandler}>Ξ</span>
+        <div className={styles.navContent}>
+          <div className={styles.logoBox}><span className={styles.logo}>小鱼工具</span></div>
+          <div className={styles.navListBox}>
+            <ul className={styles.navList} ref={this.ref}>{this.renderNav()}</ul>
+          </div>
         </div>
       </nav>
     )
