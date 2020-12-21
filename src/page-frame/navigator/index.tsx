@@ -44,7 +44,9 @@ export class Navigator extends React.Component<NavigatorProps> {
     return (
       <nav className={styles.navigator}>
         <div className={styles.navContent}>
-          <div className={styles.logoBox}><span className={styles.logo}>小鱼工具</span></div>
+          <div className={styles.logoBox}>
+            <a href="http://www.auoqu.com"><span className={styles.logo}>小鱼工具</span></a>
+          </div>
           <div className={styles.navListBox}>
             <ul className={styles.navList} ref={this.ref}>{this.renderNav()}</ul>
           </div>

@@ -17,7 +17,8 @@ const PORT = 9000;
 export default {
 	context: path.resolve(__dirname, '../'),
 	entry: {
-		main: './src/index.tsx',
+    main: './src/index.tsx',
+    // parser: './src/js/parser.js'
 	},
 	output: {
 		filename: 'static/js/[name].[hash:8].js',
