@@ -1,272 +1,241 @@
 .content {
-  margin-top: 15px;
-  margin-bottom: 15px
-}
-
-.box .content input {
-  width: 100%;
-  height: 30px;
-  line-height: 30px
-}
-
-.box .content h3 {
-  margin-top: 10px;
-  margin-bottom: 10px
-}
-
-.box .object-scan .area-text {
-  width: 100%;
-  height: 200px;
-  resize: none
-}
-
-.box .object-scan .parse-result {
-  height: 22px;
-  font-size: .75rem
-}
-
-.box .object-scan .parse-result .rate-of-progress {
-  text-align: center;
-  height: 20px;
-  line-height: 20px;
-  color: green
-}
-
-.box .object-scan .parse-result .rate-of-progress i {
-  width: 14px;
-  height: 14px;
-  background-image: url(../../img/loading.gif);
-  background-repeat: no-repeat;
-  background-size: contain;
-  display: inline-block
-}
-
-.box .object-scan .parse-result .progress-success {
-  color: green
-}
-
-.box .object-scan .parse-result .msg-error {
-  color: red
-}
-
-.box .object-scan .obj-scan {
+  display: flex;
   font-family: Courier;
-  font-size: .75rem
-}
+  font-size: .75rem;
+  padding: 16px;
 
-.box .object-scan .obj-scan .txtSearchArea {
-  position: relative
-}
+  .left-area {
+    width: 50%;
+    margin-right: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    line-height: 1;
 
-.box .object-scan .obj-scan .txtSearchArea .txt-50 {
-  width: 50%
-}
+    &:focus {
+      border: 1px solid #009aff;
+    }
 
-.box .object-scan .obj-scan .txtSearchArea .lab-tip {
-  text-align: center;
-  height: 30px;
-  line-height: 30px;
-  background-color: #fff;
-  cursor: pointer;
-  -webkit-user-select: none
-}
+    .area-text {
+      width: 100%;
+      height: 642px;
+      resize: none;
+      outline: none;
+      border: none;
+      background: transparent;
+      padding: 16px;
+    }
 
-.box .object-scan .obj-scan .txtSearchArea .lab-tip.on {
-  color: #000;
-  background-color: #aaa
-}
+  }
 
-.box .object-scan .obj-scan .txtSearchArea .lab-tip.del {
-  color: #000;
-  text-decoration: line-through
-}
+  .right-area {
+    flex: 1;
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list {
-  position: absolute;
-  width: 100%;
-  height: 300px;
-  z-index: 100;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  border: 1px solid #eee;
-  background-color: rgba(202, 202, 202, .9);
-  box-shadow: 3px 3px 5px rgba(0, 0, 0, .3);
-  outline-style: none
-}
+    .parse-result {
+      height: 22px;
+      padding: 0 10px;
+      line-height: 22px;
+      font-size: .75rem;
+      background: #ccc;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li {
-  height: 25px;
-  line-height: 25px;
-  color: #c41a16;
-  border-bottom: 1px solid #9e9e9e;
-  text-overflow: ellipsis;
-  margin: 0 5px
-}
+      .rate-of-progress {
+        text-align: center;
+        height: 20px;
+        line-height: 20px;
+        color: green;
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li.on {
-  background-color: rgba(142, 142, 142, .4)
-}
+        i {
+          width: 14px;
+          height: 14px;
+          background-image: url(../../img/loading.gif);
+          background-repeat: no-repeat;
+          background-size: contain;
+          display: inline-block
+        }
+      }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li span {
-  display: inline-block;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  text-align: left;
-  height: 25px
-}
+      .progress-success {
+        color: green
+      }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .shot-content {
-  width: 40%
-}
+      .msg-error {
+        color: red
+      }
+    }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .shot-content .redword {
-  background-color: #ff3;
-  color: red
-}
+    .txtSearchArea {
+      position: relative;
+      padding: 8px 10px;
+      background-color: #f9f9f9;
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .long-content {
-  width: 60%
-}
+      .search-txt {
+        width: 77%;
+        border-radius: 4px;
+        height: 34px;
+        line-height: 34px;
+        border: 1px solid #e0e0e0;
+        background: #fdfdfd;
+        padding: 0 8px;
+        outline: none;
+        &:focus {
+          border: 1px solid #009aff;
+        }
+      }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .long-content .redword {
-  background-color: #ff3;
-  color: red
-}
+      .lab-tip {
+        text-align: center;
+        height: 34px;
+        line-height: 34px;
+        background-color: #fff;
+        color: #333;
+        margin-left: 8px;
+        cursor: pointer;
+        user-select: none;
+      }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .blue_color {
-  color: #1c00cf
-}
+      .lab-tip.on {
+        color: #000;
+        background-color: #aaa
+      }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .red_color {
-  color: #c41a16
-}
+      .lab-tip.del {
+        color: #000;
+        text-decoration: line-through
+      }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .gray_color {
-  color: gray
-}
+      .lab-tip.disabled {
+        color: #949494;
+        cursor: no-drop;
+      }
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .black_color {
-  color: #000
-}
+      .txt-result-list {
+        position: absolute;
+        left: 10px;
+        top: 44px;
+        width: calc(100% - 20px);
+        padding: 8px;
+        min-height: 300px;
+        z-index: 100;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        background-color: rgba(214, 214, 214, 1);
+        box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+        outline-style: none;
+        border-radius: 4px;
 
-.box .object-scan .obj-scan .txtSearchArea .txt-result-list li .purple_color {
-  color: #aa0d91
-}
+        li.searchItem {
+          height: 25px;
+          line-height: 25px;
+          color: #c41a16;
+          border-bottom: 1px solid #9e9e9e;
+          text-overflow: ellipsis;
+          cursor: pointer;
+          &.on {
+            background-color: rgba(142, 142, 142, .4)
+          }
+          span {
+            display: inline-block;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-align: left;
+            height: 25px
+          }
+          .shot-content {
+            width: 40%;
+            .redword {
+              background-color: #ff3;
+              color: red
+            }
+          }
+          .long-content {
+            width: 60%;
+            .redword {
+              background-color: #ff3;
+              color: red
+            }
+          }
+          .blue_color {
+            color: #1c00cf
+          }
 
-.box .object-scan .obj-scan .printObjTree {
-  margin-top: 15px;
-  width: 100%
-}
+          .red_color {
+            color: #c41a16
+          }
 
-.box .object-scan .obj-scan .printObjTree .print-property-name {
-  width: 100%;
-  height: 30px;
-  line-height: 30px;
-  color: #c41a16;
-  background: #c7c7c7
-}
+          .gray_color {
+            color: gray
+          }
 
-.box .object-scan .obj-scan .printObjTree .print-property-value {
-  margin: 0;
-  padding: 0;
-  border-style: none;
-  background: #f5f5f5;
-  overflow-y: scroll;
-  resize: none;
-  height: 300px;
-  width: 100%
-}
+          .black_color {
+            color: #000
+          }
 
-.box .object-scan .obj-scan .printObjTree .blue_color {
-  color: #1c00cf
-}
+          .purple_color {
+            color: #aa0d91
+          }
+        }
+      }
+    }
 
-.box .object-scan .obj-scan .printObjTree .red_color {
-  color: #c41a16
-}
+    .printObjTree {
+      width: 100%;
+      border-radius: 4px;
+      background: #f1f1f1;
 
-.box .object-scan .obj-scan .printObjTree .gray_color {
-  color: gray
-}
+      .print-property-name {
+        width: 100%;
+        height: 30px;
+        line-height: 30px;
+        font-size: 14px;
+        color: #c41a16;
+        background: #cccccc;
+        padding: 0 8px;
+      }
 
-.box .object-scan .obj-scan .printObjTree .black_color {
-  color: #000
-}
+      .print-property-value {
+        margin: 0;
+        padding: 0 8px;
+        background: transparent;
+        overflow-y: scroll;
+        resize: none;
+        height: 542px;
+        width: 100%;
+        outline: none;
+        border: none;
+      }
 
-.box .object-scan .obj-scan .printObjTree .purple_color {
-  color: #aa0d91
-}
+      .blue_color {
+        color: #1c00cf
+      }
 
-.box footer {
-  width: 100%;
-  text-align: center;
-  clear: both
-}
+      .red_color {
+        color: #c41a16
+      }
 
-.box footer li {
-  display: inline-block
-}
+      .gray_color {
+        color: gray
+      }
 
-.box-plug {
-  width: auto;
-  margin: 0 10px
-}
+      .black_color {
+        color: #000
+      }
 
-.box-plug .object-scan {
-  display: flex
-}
+      .purple_color {
+        color: #aa0d91
+      }
 
-.box-plug .object-scan .left-area {
-  width: 50%;
-  margin-right: 10px
-}
-
-.box-plug .object-scan .left-area .area-text {
-  width: 100%;
-  height: 700px
-}
-
-.box-plug .object-scan .parse-result {
-  background: #e0e0e0
-}
-
-.box-plug .object-scan .obj-scan {
-  flex: 1;
-  background: #f5f5f5;
-  width: 50%
-}
-
-.box-plug .object-scan .obj-scan .printObjTree {
-  margin: 0
-}
-
-.box-plug .object-scan .obj-scan .printObjTree .print-property-value {
-  height: 550px
-}
-
-.box-plug .object-scan .obj-scan .printObjTree .print-property-name {
-  height: auto;
-  overflow-wrap: break-word
-}
-
-.box-plug .object-scan .obj-scan .txtSearchArea {
-  background: #d2d2d2
-}
-
-.box-plug .object-scan .obj-scan .txtSearchArea .txt-result-list {
-  height: 640px
-}
-
-.box-plug .object-scan .obj-scan .txtSearchArea .lab-tip,
-.box-plug .object-scan .obj-scan .txtSearchArea .txt-50 {
-  background: #d2d2d2
-}
-
-.box .object-scan .obj-scan .txtSearchArea .lab-tip.disabled {
-  color: #949494;
-}
-
-.hide {
-  display: none
+      .printObjTree {
+        margin: 0;
+        .print-property-value {
+          height: 550px;
+        }
+        .print-property-name {
+          height: auto;
+          overflow-wrap: break-word
+        }
+      }
+    }
+  }
 }

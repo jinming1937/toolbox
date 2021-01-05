@@ -39,16 +39,11 @@ export default {
 	module: {
 		rules: [
       {
-        test: /\.(js|mjs|jsx|ts|tsx)$/,
-        loader: 'eslint-loader',
-        enforce: 'pre',
-        include: [path.join(__dirname, 'src')],
-        options: {
-            fix: true
-        }
+        test: /\.worker\.js$/, //以.worker.js结尾的文件将被worker-loader加载
+        use: {loader: 'worker-loader'}
       },
 			{
-				test: /\.(js|mjs|jsx|ts|tsx)$/,
+				test: /\.(jsx|ts|tsx)$/,
 				use: [
 					{
             loader: 'babel-loader',
@@ -134,7 +129,8 @@ export default {
 			template: path.join(__dirname, 'index.html'),
 			inject: true,
       favicon: resolve('favicon.ico'),
-      package_version: 'development'
+      reactURI: 'http://127.0.0.1:9999/static/react.development.js',
+      reactDomURI: 'http://127.0.0.1:9999/static/react-dom.development.js',
 		}),
 
 		new webpack.HotModuleReplacementPlugin(),

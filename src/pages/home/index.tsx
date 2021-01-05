@@ -15,14 +15,13 @@ export class Home extends Component {
         <section className={styles.description}>
           <h4>写了几个小小前端工具</h4>
           <ul className={styles.toolList}>
-            {
-              MenuList.filter(item => item.page !== 'home').map((item: IMenuItem, index) => (
-                <li key={index}>
-                  <Link to={item.link}>{item.name}</Link><span className={styles.publishTime}>发布时间：{item.date_time}</span>
-                  <div className={styles.introduce}>{item.desc}</div>
-                </li>
-              ))
-            }
+            {MenuList.filter(item => item.page !== 'home').map((item: IMenuItem, index) => (
+              <li key={index}>
+                <Link to={item.link}>{item.name}</Link>
+                <span className={styles.publishTime}>发布时间：{item.date_time}</span>
+                <div className={styles.introduce}>{item.desc}</div>
+              </li>
+            ))}
           </ul>
         </section>
       </div>

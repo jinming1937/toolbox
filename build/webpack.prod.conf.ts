@@ -12,6 +12,8 @@ function resolve(dir: string): string {
 	return path.join(__dirname, '..', dir)
 }
 
+// const reactVersion = Process.Node.Env ? 'production.min' : 'development';
+
 export default {
 	context: path.resolve(__dirname, '../'),
 	entry: {
@@ -114,7 +116,8 @@ export default {
 			template: path.join(__dirname, 'index.html'),
 			inject: true,
       favicon: resolve('favicon.ico'),
-      package_version: 'production.min'
+      reactURI: 'https://unpkg.com/react@16.13.1/umd/react.production.min.js',
+      reactDomURI: 'https://unpkg.com/react-dom@16.13.1/umd/react-dom.production.min.js',
 		}),
 
 		new FriendlyErrorsPlugin({
