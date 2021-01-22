@@ -1,5 +1,6 @@
 import React, {ChangeEvent, ClipboardEvent, FocusEvent, useState, useCallback, useRef, CSSProperties} from 'react'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
+import {Input} from '@biqi/ui'
 import styles from './styles.less'
 
 const lowerToUpper: any = {}
@@ -42,6 +43,12 @@ export const FormatVariable = (props: IFormatVariable) => {
     [lineType]
   )
 
+  // const onOriginValueChange = useCallback(
+  //   (e: string) => {
+  //     setOriginValue(e)
+  //   },
+  //   [originValue]
+  // )
   const onOriginValueChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setOriginValue(e.currentTarget.value)

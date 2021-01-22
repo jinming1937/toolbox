@@ -18,7 +18,7 @@ export class Home extends Component {
             {MenuList.filter(item => item.page !== 'home').map((item: IMenuItem, index) => (
               <li key={index}>
                 <Link to={item.link}>{item.name}</Link>
-                <span className={styles.publishTime}>发布时间：{item.date_time}</span>
+                <span className={styles.publishTime}>发布时间：{item.dateTime}</span>
                 <div className={styles.introduce}>{item.desc}</div>
               </li>
             ))}

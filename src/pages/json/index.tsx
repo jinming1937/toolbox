@@ -9,56 +9,6 @@ type ICommonComponent = {
   value: string
 }
 
-const jsondata = {
-  name: 'exchange',
-  version: '0.1.0',
-  author: 'zhangsan <zhangsan@163.com>',
-  description: '第一个node.js程序',
-  keywords: ['node.js', 'javascript'],
-  private: true,
-  bugs: {url: 'http://path/to/bug', email: 'bug@example.com'},
-  contributors: [{name: '李四', email: 'lisi@example.com'}],
-  repository: {
-    type: 'git',
-    url: 'https://path/to/url'
-  },
-  homepage: 'http://necolas.github.io/normalize.css',
-  license: 'MIT',
-  dependencies: {
-    react: '^16.8.6',
-    'react-dom': '^16.8.6',
-    'react-router-dom': '^5.0.1',
-    'react-scripts': '3.0.1'
-  },
-  devDependencies: {
-    browserify: '~13.0.0',
-    'karma-browserify': '~5.0.1'
-  },
-  scripts: {
-    start: 'react-scripts start',
-    build: 'react-scripts build',
-    test: 'react-scripts test',
-    eject: 'react-scripts eject'
-  },
-  bin: {
-    webpack: './bin/webpack.js'
-  },
-  main: 'lib/webpack.js',
-  module: 'es/index.js',
-  eslintConfig: {
-    extends: 'react-app'
-  },
-  engines: {
-    node: '>=0.10.3 <0.12'
-  },
-  browserslist: {
-    production: ['>0.2%', 'not dead', 'not op_mini all'],
-    development: ['last 1 chrome version', 'last 1 firefox version', 'last 1 safari version']
-  },
-  style: ['./node_modules/tipso/src/tipso.css'],
-  files: ['lib/', 'bin/', 'buildin/', 'declarations/', 'hot/', 'web_modules/', 'schemas/', 'SECURITY.md']
-}
-
 export interface JsonProps {}
 export interface JsonState {
   jsonDataStr: string
@@ -544,8 +494,7 @@ export class Json extends React.Component<JsonProps, JsonState> {
           elementSpan.innerHTML = _this.loopStr(paramParentName.replace(/@@/g, '.'), paramKeywords) + _this.loopStr(item, paramKeywords)
           elementLi.appendChild(elementSpan)
         } else {
-          elementSpan.innerHTML =
-            paramParentName.replace(/@@/g, '.').replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords)) + item.replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords))
+          elementSpan.innerHTML = paramParentName.replace(/@@/g, '.').replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords)) + item.replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords))
           elementLi.appendChild(elementSpan)
         }
         elementLi.appendChild(_this.getPropertyValueDom((paramParentObj as any)[item], 'shot-content'))
@@ -588,13 +537,7 @@ export class Json extends React.Component<JsonProps, JsonState> {
       switch (cacheType) {
         case '[object String]':
           if (keywordsIsString) {
-            if (
-              cacheValue.indexOf(paramKeywords) > -1 ||
-              ('"' + cacheValue).indexOf(paramKeywords) > -1 ||
-              (cacheValue + '"').indexOf(paramKeywords) > -1 ||
-              (isOnlyDoubleQuotes && cacheValue === '') ||
-              (!isOnlyDoubleQuotes && hasDoubleQuotes && cacheValue === paramKeywords.replace(/^"|"$/g, ''))
-            ) {
+            if (cacheValue.indexOf(paramKeywords) > -1 || ('"' + cacheValue).indexOf(paramKeywords) > -1 || (cacheValue + '"').indexOf(paramKeywords) > -1 || (isOnlyDoubleQuotes && cacheValue === '') || (!isOnlyDoubleQuotes && hasDoubleQuotes && cacheValue === paramKeywords.replace(/^"|"$/g, ''))) {
               _this.buildSearchResultDom(dataProperty, '"' + cacheValue + '"', paramKeywords, loopResultStr)
             }
           } else {
@@ -673,18 +616,7 @@ export class Json extends React.Component<JsonProps, JsonState> {
             </span>
           </div>
           <div className={styles['txtSearchArea']}>
-            <input
-              value={searchInput}
-              ref={this.searchRefHandler}
-              onChange={this.onSearchInputChange}
-              onFocus={this.onSearchFocus}
-              onBlur={this.onSearchBlur}
-              onKeyDown={this.onSearchKeydown}
-              onKeyUp={this.onSearchKeyup}
-              type="search"
-              placeholder="属性名/属性值"
-              className={styles['search-txt']}
-            />
+            <input value={searchInput} ref={this.searchRefHandler} onChange={this.onSearchInputChange} onFocus={this.onSearchFocus} onBlur={this.onSearchBlur} onKeyDown={this.onSearchKeydown} onKeyUp={this.onSearchKeyup} type="search" placeholder="属性名/属性值" className={styles['search-txt']} />
             <ul ref={this.resultRefHandler} onFocus={this.onResultAreaFocus} onKeyUp={this.onResultKeyUp} className={styles['txt-result-list']} tabIndex={1} style={{display: showResult ? 'unset' : 'none'}}>
               {this.renderResultList()}
             </ul>

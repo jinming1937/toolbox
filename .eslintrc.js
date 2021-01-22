@@ -6,7 +6,7 @@ module.exports = {
   /* 解析器配置参数 */
   parserOptions: {
     ecmaFeatures: {jsx: true},
-    useJSXTextNode: true,
+    useJSXTextNode: true
     // project: './tsconfig.json',
     // tsconfigRootDir: './',
     // extraFileExtensions: ['.vue']
@@ -21,7 +21,7 @@ module.exports = {
   env: {
     // 对一个环境定义的一组全局变量的预设（类似于 babel 的 presets）
     amd: true,
-    commonjs: true,
+    commonjs: true
   },
   globals: {
     // 这里填入你的项目需要的全局变量
@@ -32,13 +32,14 @@ module.exports = {
     page: true,
     browser: true,
     context: true,
-    jestPuppeteer: true,
+    jestPuppeteer: true
   },
   rules: {
-    'prettier/prettier': "error",
+    'prettier/prettier': 'error',
     // allow async-await
     'generator-star-spacing': 'off',
     // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    camelcase: ['error', {properties: 'never'}]
   }
 }

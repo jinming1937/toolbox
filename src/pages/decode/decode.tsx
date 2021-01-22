@@ -69,16 +69,7 @@ export const Decode = (props: IDecode) => {
     <main className={styles['main-box']}>
       <section className={styles['context']}>
         <div className={styles['textarea-face']}>
-          <textarea
-            ref={originRef}
-            value={urlValue}
-            cols={30}
-            rows={10}
-            onPaste={onUrlTextAreaPaste}
-            onBlur={onUrlTextAreaBlur}
-            onChange={onUrlTextAreaChange}
-            className={styles['parse-url-area']}
-            placeholder="把想要decode的链接粘贴至此"></textarea>
+          <textarea ref={originRef} value={urlValue} cols={30} rows={10} onPaste={onUrlTextAreaPaste} onBlur={onUrlTextAreaBlur} onChange={onUrlTextAreaChange} className={styles['parse-url-area']} placeholder="把想要decode的链接粘贴至此"></textarea>
         </div>
         <div>
           <label className={styles['tool-lab']} htmlFor="isClear_cbx">
