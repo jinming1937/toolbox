@@ -1,8 +1,10 @@
 import React from 'react'
-import {classnames} from '../../util'
+import {classnames} from '@biqi/ui/lib/util'
 import MyWorker from '../../js/parser.worker.js'
 import {Item} from './item'
 import styles from './styles.less'
+
+// const {classNames: classnames} = Util
 
 type ICommonComponent = {
   label: string
@@ -13,7 +15,7 @@ export interface JsonProps {}
 export interface JsonState {
   jsonDataStr: string
   onAa: boolean
-  onTree: boolean
+  onDelTree: boolean
   onValue: boolean
   progressSucc: boolean
   progressRate: boolean
@@ -28,11 +30,23 @@ export interface JsonState {
 export class Json extends React.Component<JsonProps, JsonState> {
   fastParseWorker: Worker
   beginTime: number
+  /**
+   * 成功转化JSON后的json对象
+   *
+   * @type {(object | null)}
+   * @memberof Json
+   */
   objAim: object | null
   shiftIsDown: boolean
   isFormating: boolean
   timeFlag: number
   aimId: number
+  /**
+   * 按值搜索JSON树
+   *
+   * @type {boolean}
+   * @memberof Json
+   */
   isByValue: boolean
   objStr: string
   resultRef: HTMLUListElement | null
@@ -43,7 +57,7 @@ export class Json extends React.Component<JsonProps, JsonState> {
     this.state = {
       jsonDataStr: '',
       onAa: false,
-      onTree: false,
+      onDelTree: false,
       onValue: false,
       progressSucc: false,
       progressRate: false,
@@ -163,7 +177,9 @@ export class Json extends React.Component<JsonProps, JsonState> {
   }
 
   onSearchKeydown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === 16) this.shiftIsDown = true
+    if (e.keyCode === 16) {
+      this.shiftIsDown = true
+    }
     if (!this.isByValue) {
       /* 删除 数字 字母 下划线 */
       if (e.keyCode === 8 || (e.keyCode >= 65 && e.keyCode <= 90)) {
@@ -206,8 +222,8 @@ export class Json extends React.Component<JsonProps, JsonState> {
     const val = this.state.searchInput
     clearTimeout(this.timeFlag)
     this.timeFlag = window.setTimeout(() => {
+      console.log('searching!!!', val, e.currentTarget.value)
       this.execCreateWin(val)
-      console.log('searching!!!')
     }, 300)
   }
 
@@ -254,8 +270,8 @@ export class Json extends React.Component<JsonProps, JsonState> {
 
   /* 是否进行深度遍历 */
   onTreeClick = (e: React.MouseEvent<HTMLLabelElement, MouseEvent>) => {
-    const {onTree, searchInput} = this.state
-    this.setState({onTree: !onTree})
+    const {onDelTree, searchInput} = this.state
+    this.setState({onDelTree: !onDelTree})
     /*重置结果列表*/
     this.execCreateWin(searchInput)
   }
@@ -356,8 +372,7 @@ export class Json extends React.Component<JsonProps, JsonState> {
   execCreateWin(val: string) {
     // this.setState({resultList: []});
     if (this.objAim === null || val === '') {
-      this.setState({showResult: false, resultList: []})
-      return
+      return this.setState({showResult: false, resultList: []})
     }
     var time = +new Date()
     // 这里开个挂(\.)点作为一个全匹配,偷偷保留
@@ -365,8 +380,7 @@ export class Json extends React.Component<JsonProps, JsonState> {
     // 而且， - 位置不能乱放，如/[:-"]/g.test('.') 是非法正则： Uncaught SyntaxError: Invalid regular expression: /[:-"]/: Range out of order in character class
     // _ 下划线可作为搜索属性
     if (!this.isByValue && /[-!@#$%^&*()+=|<>?,/\[\]\\;':"\/]/g.test(val)) {
-      this.setState({showResult: false, resultList: []})
-      return
+      return this.setState({showResult: false, resultList: []})
     }
     this.isByValue ? this.mapValue(this.objAim, val) : this.mapKey(this.objAim, val)
     if (this.state.resultList.length > 0) {
@@ -404,7 +418,7 @@ export class Json extends React.Component<JsonProps, JsonState> {
    * @return {[type]}     [description]
    */
   getPropertyValueDom(propertyValue: string, elasticClassName: string, formatValue?: string) {
-    var elementSpan = document.createElement('span'),
+    var elementSpan = {className: '', textContent: '', innerHTML: ''},
       type = toString.call(propertyValue).replace(/\[object\s(\w+)\]/, '$1'),
       value = propertyValue,
       className = 'black'
@@ -448,9 +462,9 @@ export class Json extends React.Component<JsonProps, JsonState> {
         value += ''
         break
     }
-
-    elementSpan.className = elasticClassName + ' ' + className + '_color'
-    elementSpan.setAttribute('data-color', className)
+    const a = classnames
+    elementSpan.className = classnames(elasticClassName, styles[className + '_color'])
+    // elementSpan.setAttribute('data-color', className)
     if (!formatValue) {
       elementSpan.textContent = '|[' + type + ']:' + value
     } else {
@@ -461,24 +475,22 @@ export class Json extends React.Component<JsonProps, JsonState> {
 
   /**
    * 获取对象名
-   * @param  {[type]} paramParentObj 对象
+   * @param  {[type]} paramParentObj 目标对象
    * @param  {[type]} paramKeywords 属性名字符串
    * @param  {[type]} paramParentName 累计父属性名
    * @return {[type]}                dom字符串
    */
   mapKey(paramParentObj: object, paramKeywords: string, paramParentName?: string) {
-    const {onAa, onTree, resultList} = this.state
+    const {onAa, onDelTree, resultList} = this.state
     const list = []
-    var _this = this,
-      tempKeywords = '<b class="redword">{#name}</b>',
-      loopResultStr = resultList,
+    var tempKeywords = '<b class="redword">{#name}</b>',
       lowerOrUpper,
-      isUpper = onAa ? false : true,
-      isDeep = onTree ? false : true,
+      isUpper = onAa,
+      isDeep = !onDelTree,
       dataProperty = ''
     paramParentName = typeof paramParentName === 'undefined' ? '' : paramParentName + '.'
     lowerOrUpper = isUpper ? new RegExp(paramKeywords, 'i') : new RegExp(paramKeywords)
-
+    const cache = {}
     /* 左序遍历树 */
     for (var item in paramParentObj) {
       dataProperty = paramParentName + item.replace(/\./g, '@@')
@@ -486,26 +498,20 @@ export class Json extends React.Component<JsonProps, JsonState> {
         continue
       } /* 主要用于清理对Array原型扩展的属性,导致for-in遍历出多余结果集bug,当然对其他类型也有效 */
       if (item.search(lowerOrUpper) > -1) {
-        var elementLi = document.createElement('li')
-        var elementSpan = document.createElement('span')
-        elementSpan.className = 'long-content'
-        elementLi.setAttribute('data-property', dataProperty)
+        let innerHTML = ''
         if (isUpper) {
-          elementSpan.innerHTML = _this.loopStr(paramParentName.replace(/@@/g, '.'), paramKeywords) + _this.loopStr(item, paramKeywords)
-          elementLi.appendChild(elementSpan)
+          innerHTML = this.loopStr(paramParentName.replace(/@@/g, '.'), paramKeywords) + this.loopStr(item, paramKeywords)
         } else {
-          elementSpan.innerHTML = paramParentName.replace(/@@/g, '.').replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords)) + item.replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords))
-          elementLi.appendChild(elementSpan)
+          innerHTML = paramParentName.replace(/@@/g, '.').replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords)) + item.replace(new RegExp(paramKeywords, 'g'), tempKeywords.replace(/\{\#name\}/g, paramKeywords))
         }
-        elementLi.appendChild(_this.getPropertyValueDom((paramParentObj as any)[item], 'shot-content'))
-        console.log(elementLi.innerHTML)
-        // loopResultStr.appendChild(elementLi);
+        const secondEle = this.getPropertyValueDom((paramParentObj as any)[item], styles['shot-content'])
+        Object.assign(cache, {'data-property': dataProperty, className: styles['long-content'], innerHTML, second: secondEle})
+        list.push(cache)
         // list.push({value: (paramParentObj as any)[item], label: item});
       }
       const val = (paramParentObj as any)[item]
       if (isDeep && typeof val === 'object' && val !== null && (val.constructor.name === 'Object' || (val.constructor.name === 'Array' && val.length > 0))) {
-        _this.mapKey(val, paramKeywords, dataProperty)
-        // list.push({value: (paramParentObj as any)[item], label: item});
+        this.mapKey(val, paramKeywords, dataProperty)
       } else {
         list.push({value: (paramParentObj as any)[item], label: item})
       }
@@ -515,10 +521,10 @@ export class Json extends React.Component<JsonProps, JsonState> {
   }
 
   mapValue(paramParentObj: object, paramKeywords: string, paramParentName?: string) {
-    const {onTree} = this.state
+    const {onDelTree} = this.state
     var _this = this,
       loopResultStr = this.state.resultList[0],
-      isDeep = onTree ? false : true,
+      isDeep = onDelTree ? false : true,
       cacheValue = null,
       cacheType = '',
       keywordsIsString = /^"/.test(paramKeywords) || /"$/.test(paramKeywords),
@@ -582,17 +588,17 @@ export class Json extends React.Component<JsonProps, JsonState> {
       return tempKeywords.replace(/\{\#name\}/, $1)
     })
 
-    elementSpan.className = 'shot-content'
-    elementLi.setAttribute('data-property', showKey)
-    elementSpan.innerHTML = showKey.replace(/@@/g, '.')
-    elementLi.appendChild(elementSpan)
-    elementLi.appendChild(this.getPropertyValueDom(showValue, 'long-content', formatValue))
+    // elementSpan.className = 'shot-content'
+    // elementLi.setAttribute('data-property', showKey)
+    // elementSpan.innerHTML = showKey.replace(/@@/g, '.')
+    // elementLi.appendChild(elementSpan)
+    // elementLi.appendChild(this.getPropertyValueDom(showValue, 'long-content', formatValue))
     // loopResultStr.appendChild(elementLi);
     return
   }
 
   render() {
-    const {jsonDataStr, onAa, onTree, onValue, progressSucc, progressRate, msgStrInvalid, msgStr, resultValue, searchInput, showResult, propertyName} = this.state
+    const {jsonDataStr, onAa, onDelTree, onValue, progressSucc, progressRate, msgStrInvalid, msgStr, resultValue, searchInput, showResult, propertyName} = this.state
     return (
       <section className={styles.content}>
         <div className={styles['left-area']}>
@@ -615,20 +621,14 @@ export class Json extends React.Component<JsonProps, JsonState> {
               {msgStr}
             </span>
           </div>
-          <div className={styles['txtSearchArea']}>
+          <div className={styles.txtSearchArea}>
             <input value={searchInput} ref={this.searchRefHandler} onChange={this.onSearchInputChange} onFocus={this.onSearchFocus} onBlur={this.onSearchBlur} onKeyDown={this.onSearchKeydown} onKeyUp={this.onSearchKeyup} type="search" placeholder="属性名/属性值" className={styles['search-txt']} />
             <ul ref={this.resultRefHandler} onFocus={this.onResultAreaFocus} onKeyUp={this.onResultKeyUp} className={styles['txt-result-list']} tabIndex={1} style={{display: showResult ? 'unset' : 'none'}}>
               {this.renderResultList()}
             </ul>
-            <label onClick={this.onAaClick} className={classnames(styles['lab-tip'], styles['lab-checked-Aa'], {[styles.on]: onAa, [styles.disabled]: onValue})} title="是否区分大小写，默认否">
-              Aa
-            </label>
-            <label onClick={this.onTreeClick} className={classnames(styles['lab-tip'], styles['lab-checked-Tree'], {[styles.del]: onTree})} title="是否进行深度遍历，默认是">
-              Tree
-            </label>
-            <label onClick={this.onValueClick} className={classnames(styles['lab-tip'], styles['lab-checked-Value'], {[styles.on]: onValue})} title="是否进行按值(boolean、string、number、null)搜索，默认否">
-              Value
-            </label>
+            <label onClick={this.onAaClick} className={classnames(styles['lab-tip'], {[styles.on]: onAa, [styles.disabled]: onValue})} title="是否区分大小写，默认否">{`Aa`}</label>
+            <label onClick={this.onTreeClick} className={classnames(styles['lab-tip'], {[styles.del]: onDelTree})} title="是否进行深度遍历，默认是">{`Tree`}</label>
+            <label onClick={this.onValueClick} className={classnames(styles['lab-tip'], {[styles.on]: onValue})} title="是否进行按值(boolean、string、number、null)搜索，默认否">{`Value`}</label>
           </div>
           <div className={styles.printObjTree}>
             <div className={styles['print-property-name']}>{propertyName}</div>

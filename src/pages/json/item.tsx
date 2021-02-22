@@ -1,5 +1,5 @@
 import React, {useCallback} from 'react'
-import {classnames} from '@/util'
+import {classnames} from '@biqi/ui/lib/util'
 
 type IProps<T> = {
   className?: string

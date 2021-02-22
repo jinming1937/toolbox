@@ -83,7 +83,7 @@
     "ykit": "^0.8.13"
   },
   "dependencies": {
-    "@biqi/ui": "^1.0.2",
+    "@biqi/ui": "^1.0.4",
     "axios": "^0.21.0",
     "classnames": "^2.2.6",
     "react": "^16.13.1",

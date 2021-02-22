@@ -1,3 +1,4 @@
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import FriendlyErrorsPlugin, {Severity} from 'friendly-errors-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
@@ -5,12 +6,9 @@ import UglifyjsWebpackPlugin from 'uglifyjs-webpack-plugin'
 import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin'
 import path from 'path'
 import webpack from 'webpack'
+import {resolve} from './util'
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-
-function resolve(dir: string): string {
-  return path.join(__dirname, '..', dir)
-}
 
 export default {
   context: path.resolve(__dirname, '../'),
@@ -19,9 +17,10 @@ export default {
   },
   output: {
     filename: './static/js/[name].[hash:8].js',
-    publicPath: ''
+    publicPath: '/'
   },
   externals: {
+    '@biqi/ui': 'BiQi',
     react: 'React',
     'react-dom': 'ReactDOM'
   },
@@ -34,7 +33,11 @@ export default {
   module: {
     rules: [
       {
-        test: /\.(js|mjs|jsx|ts|tsx)$/,
+        test: /\.worker\.js$/, // 以.worker.js结尾的文件将被worker-loader加载
+        use: {loader: 'worker-loader'}
+      },
+      {
+        test: /\.(jsx|ts|tsx)$/,
         use: [
           {
             loader: 'babel-loader',
@@ -112,6 +115,7 @@ export default {
       template: path.join(__dirname, 'index.html'),
       inject: true,
       favicon: resolve('favicon.ico'),
+      biqiJS: './static/biqi.mini.js',
       reactURI: 'https://unpkg.com/react@16.13.1/umd/react.production.min.js',
       reactDomURI: 'https://unpkg.com/react-dom@16.13.1/umd/react-dom.production.min.js'
     }),
@@ -124,14 +128,11 @@ export default {
       onErrors(_: Severity, errors: string) {
         console.error(errors)
       }
-    })
-    // new CopyWebpackPlugin([
-    //     {
-    //         from: resolve('static'),
-    //         to: 'static',
-    //         ignore: ['.*']
-    //     }
-    // ])
+    }),
+    new CopyWebpackPlugin([
+      {from: resolve('node_modules/@biqi/ui/dist/biqi.mini.js'), to: 'static'},
+      {from: resolve('node_modules/@biqi/ui/dist/theme/index.mini.css'), to: 'static'}
+    ])
   ],
   mode: 'production',
   optimization: {

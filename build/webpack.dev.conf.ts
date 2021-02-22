@@ -4,13 +4,9 @@ import FriendlyErrorsPlugin, {Severity} from 'friendly-errors-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
 import webpack from 'webpack'
-import {getIPAdress} from './util'
+import {getIPAdress, resolve} from './util'
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
-
-function resolve(dir: string): string {
-  return path.join(__dirname, '..', dir)
-}
 
 const PORT = 9000
 
@@ -122,7 +118,7 @@ export default {
 
     new FriendlyErrorsPlugin({
       compilationSuccessInfo: {
-        messages: [`Your application [sale] is running here: http://${getIPAdress()}:${PORT}`],
+        messages: [`Your application [toolbox] is running here: http://${getIPAdress()}:${PORT}`],
         notes: []
       },
       onErrors(_: Severity, errors: string) {

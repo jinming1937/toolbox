@@ -125,13 +125,13 @@ export const FormatVariable = (props: IFormatVariable) => {
         <div className={styles.label}>原标识符:</div>
         <div className={styles.container}>
           <input value={originValue} ref={originRef} onChange={onOriginValueChange} onPaste={onOriginValuePaste} onBlur={onOriginValueBlur} type="text" className={styles.inputText} placeholder="粘贴到此次处" />
-          <input defaultValue={originValue} type="text" className={styles.inputText} disabled placeholder="备份回看" />
+          <Input value={originValue} disabled={true} placeholder="备份回看" />
         </div>
       </div>
       <div className={styles.flexBox}>
         <div className={styles.label}>新标识符:</div>
         <div className={styles.container}>
-          <input defaultValue={formatedValue} type="text" className={styles.inputText} placeholder="转换结果..." disabled />
+          <Input value={formatedValue} disabled placeholder="转换结果..." />
           <CopyToClipboard text={formatedValue} onCopy={handleCopy}>
             <input type="button" className={styles.inputBtn} value={`点此复制${copyState ? '√' : ' '}`} onClick={onCopyClick} />
           </CopyToClipboard>
