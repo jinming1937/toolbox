@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {classnames} from '@biqi/ui/lib/util'
 import MyWorker from '../../js/parser.worker.js'
-import styles from './styles.less'
+import styles from './formatJson.less'
 
 export interface FormatJsonProps {
   onFormat: (data: object) => void

@@ -1,5 +1,5 @@
 import React, {useState, useCallback, useRef} from 'react'
-import styles from './styles.less'
+import styles from './decode.less'
 
 export type IDecode = {}
 let times = 0

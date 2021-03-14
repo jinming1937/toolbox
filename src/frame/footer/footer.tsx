@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from './styles.less'
+import styles from './footer.less'
 import img from '../../img/pl.png'
 
 const RECORD_CODE = '11010802033715'

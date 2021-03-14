@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Calendar} from '@biqi/ui'
-import {FormatVariable} from './formatVariable'
-import styles from './styles.less'
+import {FormatVariable} from './formatVariable/formatVariable'
+import styles from './format.less'
 
 export class Format extends Component<{}, {}> {
   constructor(props: {}) {

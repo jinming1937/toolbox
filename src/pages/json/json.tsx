@@ -2,7 +2,7 @@ import React from 'react'
 import {classnames} from '@biqi/ui/lib/util'
 import MyWorker from '../../js/parser.worker.js'
 import {Item} from './item'
-import styles from './styles.less'
+import styles from './json.less'
 
 // const {classNames: classnames} = Util
 

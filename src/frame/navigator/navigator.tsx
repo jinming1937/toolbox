@@ -2,7 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import {Link} from 'react-router-dom'
 import {MenuList, IMenuItem} from '@/util'
-import styles from './styles.less'
+import styles from './navigator.less'
 
 interface NavigatorProps {}
 export class Navigator extends React.Component<NavigatorProps> {

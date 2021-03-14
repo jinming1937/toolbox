@@ -1,7 +1,7 @@
 import React, {ChangeEvent, ClipboardEvent, FocusEvent, useState, useCallback, useRef, CSSProperties} from 'react'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import {Input} from '@biqi/ui'
-import styles from './styles.less'
+import styles from './formatVariable.less'
 
 const lowerToUpper: any = {}
 const upperToLower: any = {}

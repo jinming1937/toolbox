@@ -2,7 +2,7 @@ import React from 'react'
 import {Route, Switch, Redirect} from 'react-router-dom'
 import Page from '@/pages'
 import {IMenuItem, MenuList} from '@/util'
-import {Footer, Navigator} from '@/page-frame'
+import {Footer, Navigator} from '@/frame'
 import styles from './index.less'
 export default class App extends React.Component {
   render() {

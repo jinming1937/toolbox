@@ -1,11 +1,11 @@
-export * from './home'
-export * from './json'
-export * from './format'
-export * from './decode'
+export * from './home/home'
+export * from './json/json'
+export * from './format/format'
+export * from './decode/decode'
 
-import {Home} from './home'
-import {Json} from './json'
-import {Format} from './format'
-import {Decode} from './decode'
+import {Home} from './home/home'
+import {Json} from './json/json'
+import {Format} from './format/format'
+import {Decode} from './decode/decode'
 
 export default {home: Home, json: Json, format: Format, decode: Decode}
