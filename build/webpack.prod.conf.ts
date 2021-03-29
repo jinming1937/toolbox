@@ -110,7 +110,7 @@ export default {
 
     new HtmlWebpackPlugin({
       title: '小鱼工具',
-      filename: 'index.html',
+      filename: 'index.php',
       chunks: ['main'],
       template: path.join(__dirname, 'index.html'),
       inject: true,

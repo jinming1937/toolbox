@@ -1,4 +1,4 @@
-// import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import FriendlyErrorsPlugin, {Severity} from 'friendly-errors-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
