@@ -7,3 +7,5 @@ export const getIPAdress = () => {
 export function resolve(dir: string): string {
   return path.join(__dirname, '..', dir)
 }
+
+export const STATIC_HOST = 'jm.lit.net'

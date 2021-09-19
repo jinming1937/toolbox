@@ -37,6 +37,7 @@ dev/
 prd/
 ver/
 dist/
+static/
 .happypack/
 .lib_cache/
 .eslintstatus

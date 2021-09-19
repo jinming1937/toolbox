@@ -1,10 +1,10 @@
-import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+// import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import ExtractTextPlugin from 'extract-text-webpack-plugin'
 import FriendlyErrorsPlugin, {Severity} from 'friendly-errors-webpack-plugin'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import path from 'path'
 import webpack from 'webpack'
-import {getIPAdress, resolve} from './util'
+import {getIPAdress, resolve, STATIC_HOST} from './util'
 const ForkTsCheckerNotifierWebpackPlugin = require('fork-ts-checker-notifier-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 
@@ -110,8 +110,9 @@ export default {
       template: path.join(__dirname, 'index.html'),
       inject: true,
       favicon: resolve('favicon.ico'),
-      reactURI: 'http://127.0.0.1:9999/static/react.development.js',
-      reactDomURI: 'http://127.0.0.1:9999/static/react-dom.development.js'
+      biqiJS: '',
+      reactURI: `http://${STATIC_HOST}/react.development.js`,
+      reactDomURI: `http://${STATIC_HOST}/react-dom.development.js`
     }),
 
     new webpack.HotModuleReplacementPlugin(),

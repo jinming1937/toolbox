@@ -17,7 +17,7 @@ export default {
   },
   output: {
     filename: './static/js/[name].[hash:8].js',
-    publicPath: '/'
+    publicPath: ''
   },
   externals: {
     '@biqi/ui': 'BiQi',
@@ -115,7 +115,7 @@ export default {
       template: path.join(__dirname, 'index.html'),
       inject: true,
       favicon: resolve('favicon.ico'),
-      biqiJS: './static/biqi.mini.js',
+      biqiJS: '<script crossorigin src="./static/biqi.mini.js"></script>',
       reactURI: 'https://unpkg.com/react@16.13.1/umd/react.production.min.js',
       reactDomURI: 'https://unpkg.com/react-dom@16.13.1/umd/react-dom.production.min.js'
     }),
