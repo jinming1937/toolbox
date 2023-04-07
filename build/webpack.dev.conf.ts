@@ -111,8 +111,10 @@ export default {
       inject: true,
       favicon: resolve('favicon.ico'),
       biqiJS: '',
-      reactURI: `http://${STATIC_HOST}/react.development.js`,
-      reactDomURI: `http://${STATIC_HOST}/react-dom.development.js`
+      // reactURI: `http://${STATIC_HOST}/react.development.js`,
+      // reactDomURI: `http://${STATIC_HOST}/react-dom.development.js`
+      reactURI: 'https://unpkg.com/react@16.13.1/umd/react.production.min.js',
+      reactDomURI: 'https://unpkg.com/react-dom@16.13.1/umd/react-dom.production.min.js'
     }),
 
     new webpack.HotModuleReplacementPlugin(),
